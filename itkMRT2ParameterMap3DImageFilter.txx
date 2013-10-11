@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,15 +34,15 @@ namespace itk
 class vnl_exponential_function : public vnl_least_squares_function
 {
 public:
-  vnl_exponential_function(bool with_grad, unsigned int n, 
+  vnl_exponential_function(bool with_grad, unsigned int n,
     vnl_vector<double> t, vnl_vector<double> s)
-    : vnl_least_squares_function(2,n,with_grad ? use_gradient : no_gradient) 
+    : vnl_least_squares_function(2,n,with_grad ? use_gradient : no_gradient)
     {this->m_NSignals=n; this->m_Time=t; this->m_Signal=s;}
 
   static double compute(double t, double a, double b) {
     return (a * exp( -t * b ));
     }
-  static double compute_a(double t, double a, double b) {
+  static double compute_a(double t, double /* a */, double b) {
     return (exp( -t * b ));
     }
   static double compute_b(double t, double a, double b) {
@@ -63,7 +63,7 @@ public:
       J(i,1) = compute_b(this->m_Time[i], x(0), x(1) );
       }
     }
-  
+
 private:
   unsigned int        m_NSignals;
   vnl_vector<double>  m_Time;
@@ -75,19 +75,19 @@ class vnl_exponential_with_constant_function : public vnl_least_squares_function
 public:
   vnl_exponential_with_constant_function(bool with_grad, unsigned int n,
     vnl_vector<double> t, vnl_vector<double> s)
-  : vnl_least_squares_function(3, n,with_grad ? use_gradient : no_gradient) 
+  : vnl_least_squares_function(3, n,with_grad ? use_gradient : no_gradient)
   {this->m_NSignals=n; this->m_Time=t; this->m_Signal=s;}
 
   static double compute(double t, double a, double b, double c) {
     return (a * exp( -t * b ) + c);
     }
-  static double compute_a(double t, double a, double b, double c) {
+  static double compute_a(double t, double /* a */, double b, double /* c */) {
     return (exp( -t * b ));
     }
-  static double compute_b(double t, double a, double b, double c) {
+  static double compute_b(double t, double a, double b, double /* c */) {
     return (- t * a * exp( -t * b ));
     }
-  static double compute_c(double t, double a, double b, double c) {
+  static double compute_c(double /* t */, double /* a */, double /* b */, double /* c */) {
     return ( 1.0 );
     }
 
@@ -108,7 +108,7 @@ public:
       J(i,2) = compute_c(this->m_Time[i], x(0), x(1), x(2) );
       }
     }
-  
+
 private:
   unsigned int        m_NSignals;
   vnl_vector<double>  m_Time;
@@ -117,11 +117,11 @@ private:
 
 template< class TMREchoImagePixelType, class TMRParameterMapImagePixelType >
 MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
-  TMRParameterMapImagePixelType>::MRT2ParameterMap3DImageFilter() 
+  TMRParameterMapImagePixelType>::MRT2ParameterMap3DImageFilter()
 {
   // At least 1 input is necessary for a vector image.
   // For images added one at a time we need at least 2
-  this->SetNumberOfRequiredInputs( 1 ); 
+  this->SetNumberOfRequiredInputs( 1 );
   this->m_NumberOfEchoImages = 0;
   this->m_MaxT2Time = 10.0f;
   this->m_PerformR2Mapping = false;
@@ -132,25 +132,25 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
 
 
 template< class TMREchoImagePixelType, class TMRParameterMapImagePixelType >
-void 
+void
 MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
   TMRParameterMapImagePixelType>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
 
-  os << indent << "PerformR2Mapping: " << (this->m_PerformR2Mapping ? "On" 
+  os << indent << "PerformR2Mapping: " << (this->m_PerformR2Mapping ? "On"
     : "Off") << std::endl;
   if ( this->m_EchoTimeContainer )
     {
-    os << indent << "EchoTimeContainer: " << this->m_EchoTimeContainer 
+    os << indent << "EchoTimeContainer: " << this->m_EchoTimeContainer
       << std::endl;
     }
   else
     {
     os << indent << "EchoTimeContainer: (Echo times not set)" << std::endl;
     }
-  os << indent << "NumberOfEchoImages: " << this->m_NumberOfEchoImages 
+  os << indent << "NumberOfEchoImages: " << this->m_NumberOfEchoImages
     << std::endl;
   os << indent << "Maximum T2 time: " << this->m_MaxT2Time << std::endl;
   if ( this->m_MREchoImageTypeEnumeration == MREchoIsInASingleImage )
@@ -159,17 +159,17 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
     }
   else if ( this->m_MREchoImageTypeEnumeration == MREchoIsInManyImages )
     {
-    os << indent << "A multicomponent MR echo image has been supplied" 
+    os << indent << "A multicomponent MR echo image has been supplied"
       << std::endl;
     }
   if ( this->m_Algorithm == LINEAR )
     {
-    os << indent << "The LINEAR algorithm is being used for the T2 fitting" 
+    os << indent << "The LINEAR algorithm is being used for the T2 fitting"
       << std::endl;
     }
   else if ( this->m_Algorithm == NON_LINEAR )
     {
-    os << indent << "The NON_LINEAR algorithm is being used for the T2 fitting" 
+    os << indent << "The NON_LINEAR algorithm is being used for the T2 fitting"
       << std::endl;
     }
   else
@@ -181,7 +181,7 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
 
 //----------------------------------------------------------------------------
 template< class TMREchoImagePixelType, class TMRParameterMapImagePixelType >
-void 
+void
 MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
   TMRParameterMapImagePixelType>
 ::GenerateOutputInformation()
@@ -199,21 +199,21 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
 }
 
 template< class TMREchoImagePixelType, class TMRParameterMapImagePixelType >
-void 
+void
 MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
   TMRParameterMapImagePixelType>
 ::BeforeThreadedGenerateData()
 {
   const unsigned int numberOfInputs = this->GetNumberOfInputs();
 
-  // There need to be at least 2 echo images to be able to compute the 
+  // There need to be at least 2 echo images to be able to compute the
   // T2 map.
   if( this->m_NumberOfEchoImages < 2 )
     {
     itkExceptionMacro( << "At least 2 echo images are required" );
     }
-    
-  // If there is only 1 echo image, it must be an itk::VectorImage. Otherwise we 
+
+  // If there is only 1 echo image, it must be an itk::VectorImage. Otherwise we
   // must have a container of (numberOfInputs-1) itk::Image. Check to make sure
   if ( (numberOfInputs == 1)
       && (this->m_MREchoImageTypeEnumeration != MREchoIsInASingleImage) )
@@ -222,7 +222,7 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
       this->ProcessObject::GetInput(0)->GetNameOfClass());
     if ( strcmp(echoImageClassName.c_str(),"VectorImage") != 0 )
       {
-      itkExceptionMacro( << 
+      itkExceptionMacro( <<
           "There is only one echo image. It should be a VectorImage. "
           << "But its of type: " << echoImageClassName );
       }
@@ -233,7 +233,7 @@ template< class TMREchoImagePixelType, class TMRParameterMapImagePixelType >
 void
 MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
   TMRParameterMapImagePixelType>
-::FitLinearExponential(ExponentialFitType X, ExponentialFitType Y, 
+::FitLinearExponential(ExponentialFitType X, ExponentialFitType Y,
   unsigned int num, MRParameterMapPixelType &output)
 {
   EchoTimeType Sumxy=0, Sumx=0, Sumy=0, Sumx2=0, Sumy2=0, b=0, denom=0;
@@ -249,8 +249,8 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
   denom = Sumx2-(Sumx*Sumx/static_cast<EchoTimeType>(num));
   if( denom == 0 )
     {
-    b = NumericTraits< EchoTimeType >::max() * 
-      ((Sumxy-(Sumx*Sumy/static_cast<EchoTimeType>(num))) < 0)?-1.0f:1.0f;
+    b = NumericTraits< EchoTimeType >::max() *
+      (((Sumxy-(Sumx*Sumy/static_cast<EchoTimeType>(num))) < 0)?-1.0f:1.0f);
     }
   else
     {
@@ -271,7 +271,7 @@ template< class TMREchoImagePixelType, class TMRParameterMapImagePixelType >
 void
 MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
   TMRParameterMapImagePixelType>
-::FitNonlinearExponential(ExponentialFitType X, ExponentialFitType Y, 
+::FitNonlinearExponential(ExponentialFitType X, ExponentialFitType Y,
   unsigned int num, MRParameterMapPixelType &output)
 {
   ExponentialFitType temp;
@@ -305,7 +305,7 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
     case vnl_levenberg_marquardt::CONVERGED_FTOL:   
     case vnl_levenberg_marquardt::CONVERGED_XTOL:   
     case vnl_levenberg_marquardt::CONVERGED_XFTOL:   
-    case vnl_levenberg_marquardt::CONVERGED_GTOL:  
+    case vnl_levenberg_marquardt::CONVERGED_GTOL:
       output[1] = static_cast<typename MRParameterMapPixelType::ValueType>
         (x1[0]);
       output[0] = static_cast<typename MRParameterMapPixelType::ValueType>
@@ -348,7 +348,7 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
 
   // Find linear fit for A & B as initial estimation.
   FitLinearExponential(X,Y,num,output);
-  
+
   vnl_exponential_with_constant_function f(true,num,X,Y);
 
   vnl_levenberg_marquardt lm(f);
@@ -373,7 +373,7 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
     case vnl_levenberg_marquardt::CONVERGED_FTOL:   
     case vnl_levenberg_marquardt::CONVERGED_XTOL:   
     case vnl_levenberg_marquardt::CONVERGED_XFTOL:   
-    case vnl_levenberg_marquardt::CONVERGED_GTOL:  
+    case vnl_levenberg_marquardt::CONVERGED_GTOL:
       output[1] = static_cast<typename MRParameterMapPixelType::ValueType>
         (x1[0]);
       output[0] = static_cast<typename MRParameterMapPixelType::ValueType>
@@ -409,21 +409,21 @@ void
 MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
   TMRParameterMapImagePixelType>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-  int threadId)
+  ThreadIdType threadId)
 {
-  typename OutputImageType::Pointer outputImage = 
+  typename OutputImageType::Pointer outputImage =
     static_cast< OutputImageType * >(this->ProcessObject::GetOutput(0));
-  
+
   ImageRegionIterator< OutputImageType > oit(outputImage, outputRegionForThread);
   oit.GoToBegin();
-  
+
   ProgressReporter progress(this, threadId,
     outputRegionForThread.GetNumberOfPixels(), 100);
-    
+
   // Two cases here .
   // 1. If the echoes have been specified in multiple images, we will create
-  // 'n' iterators for each of the echo images and fit the T2 curve for each 
-  // voxel. 
+  // 'n' iterators for each of the echo images and fit the T2 curve for each
+  // voxel.
   // 2. If the echo images have been specified in a single multi-component image,
   // one iterator will suffice to do the same.
 
@@ -433,24 +433,24 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
     typedef ImageRegionConstIterator< MREchoImageType > MREchoIteratorType;
     std::vector< MREchoIteratorType * > echoItContainer;
     int nonzeroCount = 0;
-    
+
     for( unsigned int i = 0; i< this->m_NumberOfEchoImages; i++ )
       {
       typename MREchoImageType::Pointer echoImagePointer = NULL;
-      
-      echoImagePointer = static_cast< MREchoImageType * >( 
+
+      echoImagePointer = static_cast< MREchoImageType * >(
         this->ProcessObject::GetInput(i) );
-      
-      MREchoIteratorType *eit = new MREchoIteratorType( echoImagePointer, 
+
+      MREchoIteratorType *eit = new MREchoIteratorType( echoImagePointer,
         outputRegionForThread );
       eit->GoToBegin();
       echoItContainer.push_back(eit);
       }
-    
+
     // Iterate over the echo images and fit the T2 curve.
     while( !oit.IsAtEnd() )
       {
-      
+
       MRParameterMapPixelType map;
       map.SetSize(4);
       map.Fill(0);
@@ -471,14 +471,14 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
           {
           nonzeroCount = i;
           }
-        ++(*echoItContainer[i]);  
+        ++(*echoItContainer[i]);
         }
       if( nonzeroCount < 0 )
         {
         nonzeroCount = this->m_NumberOfEchoImages;
         }
 
-      // Only do the calculation if we have at least 2 contiguous non-zero 
+      // Only do the calculation if we have at least 2 contiguous non-zero
       // values.
       if( nonzeroCount >= 2 )
         {
@@ -547,10 +547,10 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
     typedef typename MREchoImagesType::PixelType         MREchoVectorType;
     typename MREchoImagesType::Pointer echoImagePointer = NULL;
     int nonzeroCount = 0;
-    
+
     echoImagePointer = static_cast< MREchoImagesType * >(
       this->ProcessObject::GetInput(0) );
-    
+
     MREchoIteratorType eit(echoImagePointer, outputRegionForThread );
     eit.GoToBegin();
 
@@ -583,7 +583,7 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
         nonzeroCount = this->m_NumberOfEchoImages;
         }
 
-      // Only do the calculation if we have at least 2 contiguous non-zero 
+      // Only do the calculation if we have at least 2 contiguous non-zero
       // values.
       if( nonzeroCount >= 2 )
         {
@@ -650,11 +650,11 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
   TMRParameterMapImagePixelType>
 ::AddMREchoImage( EchoTimeType echoTime, const MREchoImageType *image)
 {
-  // Make sure crazy users did not call both AddMREchoImage and 
+  // Make sure crazy users did not call both AddMREchoImage and
   // SetMREchoImage
   if( this->m_MREchoImageTypeEnumeration == MREchoIsInASingleImage)
     {
-    itkExceptionMacro( << "Cannot call both methods:" 
+    itkExceptionMacro( << "Cannot call both methods:"
     << "AddMREchoImage and SetMREchoImage. Please call only one of them.");
     }
 
@@ -664,9 +664,9 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
     {
     this->m_EchoTimeContainer = EchoTimeContainerType::New();
     }
-    
+
   m_EchoTimeContainer->InsertElement( this->m_NumberOfEchoImages, echoTime );
-  this->ProcessObject::SetNthInput( this->m_NumberOfEchoImages, 
+  this->ProcessObject::SetNthInput( this->m_NumberOfEchoImages,
       const_cast< MREchoImageType* >(image) );
   ++this->m_NumberOfEchoImages;
   this->m_MREchoImageTypeEnumeration = MREchoIsInManyImages;
@@ -676,14 +676,14 @@ template< class TMREchoImagePixelType, class TMRParameterMapImagePixelType >
 void
 MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
   TMRParameterMapImagePixelType>
-::SetMREchoImage( EchoTimeContainerType *echoContainer, 
+::SetMREchoImage( EchoTimeContainerType *echoContainer,
   const MREchoImagesType *image )
 {
-  // Make sure crazy users did not call both AddMREchoImage and 
+  // Make sure crazy users did not call both AddMREchoImage and
   // SetMREchoImage
   if( this->m_MREchoImageTypeEnumeration == MREchoIsInManyImages )
     {
-    itkExceptionMacro( << "Cannot call both methods:" 
+    itkExceptionMacro( << "Cannot call both methods:"
     << "AddMREchoImage and SetMREchoImage. Please call only one of them.");
     }
 
@@ -691,16 +691,16 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
 
   this->m_NumberOfEchoImages = echoContainer->Size();
 
-  // ensure that the echo image we received has as many components as 
+  // ensure that the echo image we received has as many components as
   // the number of echo times
   if( image->GetVectorLength() != this->m_NumberOfEchoImages )
     {
-    itkExceptionMacro( << this->m_NumberOfEchoImages << 
+    itkExceptionMacro( << this->m_NumberOfEchoImages <<
       " echo times specified but image has " << image->GetVectorLength()
       << " components.");
     }
-  
-  this->ProcessObject::SetNthInput( 0, 
+
+  this->ProcessObject::SetNthInput( 0,
       const_cast< MREchoImagesType* >(image) );
   this->m_MREchoImageTypeEnumeration = MREchoIsInASingleImage;
 }

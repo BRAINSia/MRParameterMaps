@@ -42,7 +42,7 @@ public:
   static double compute(double t, double a, double b) {
     return (a * ( 1.0 - exp( -t * b )));
     }
-  static double compute_a(double t, double a, double b) {
+  static double compute_a(double t, double /* a */, double b) {
     return (1.0 - exp( -t * b ));
     }
   static double compute_b(double t, double a, double b) {
@@ -81,13 +81,13 @@ public:
   static double compute(double t, double a, double b, double c) {
     return (a * ( b - exp( -t * c )));
     }
-  static double compute_a(double t, double a, double b, double c) {
+  static double compute_a(double t, double /* a */, double b, double c) {
     return (b - exp( -t * c ));
     }
-  static double compute_b(double t, double a, double b, double c) {
+  static double compute_b(double /* t */, double a, double /* b */, double /* c */) {
     return ( a );
     }
-  static double compute_c(double t, double a, double b, double c) {
+  static double compute_c(double t, double a, double /* b */, double c) {
     return (t * a * exp( -t * c ));
     }
 
@@ -126,7 +126,7 @@ public:
   static double compute(double t, double a, double b) {
     return (a * ( 1.0 - 2.0 * exp( -t * b )));
     }
-  static double compute_a(double t, double a, double b) {
+  static double compute_a(double t, double /* a */, double b) {
     return (1.0 - 2.0 * exp( -t * b ));
     }
   static double compute_b(double t, double a, double b) {
@@ -165,10 +165,10 @@ public:
   static double compute(double t, double a, double b, double c) {
     return (a * ( 1.0 - b * exp( -t * c )));
     }
-  static double compute_a(double t, double a, double b, double c) {
+  static double compute_a(double t, double /* a */, double b, double c) {
     return (1.0 - b * exp( -t * c ));
     }
-  static double compute_b(double t, double a, double b, double c) {
+  static double compute_b(double t, double a, double /* b */, double c) {
     return ( - a * exp( -t * c ));
     }
   static double compute_c(double t, double a, double b, double c) {
@@ -815,7 +815,7 @@ template< class TMRImagePixelType, class TMRParameterMapImagePixelType >
 void
 MRT1ParameterMap3DImageFilter<TMRImagePixelType,TMRParameterMapImagePixelType>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-  int threadId)
+  ThreadIdType threadId)
 {
   typename OutputImageType::Pointer outputImage = 
     static_cast< OutputImageType * >(this->ProcessObject::GetOutput(0));

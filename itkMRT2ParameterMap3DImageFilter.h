@@ -190,7 +190,7 @@ protected:
   
   void BeforeThreadedGenerateData();
   void ThreadedGenerateData( const 
-      OutputImageRegionType &outputRegionForThread, int);
+      OutputImageRegionType &outputRegionForThread, ThreadIdType);
   
   /** enum to indicate if the MR echo image is specified as a single multi-
    * component image or as several separate images */

@@ -1,6 +1,7 @@
 #include "itkWin32Header.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "itkNumericTraits.h"
 #include "itkImage.h"
 #include "itkImageFileReader.h"
@@ -59,7 +60,7 @@ int main(int argc, char **argv)
       {
       RegressionTestImage(argv[1], argv[bestBaseline], 1, true);
       }
-    
+
     }
   catch(const itk::ExceptionObject& e)
     {
@@ -124,7 +125,7 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
     baselineSize = baselineReader->GetOutput()->GetLargestPossibleRegion().GetSize();
   ImageType::SizeType testSize;
     testSize = testReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  
+
   if (baselineSize != testSize)
     {
     std::cerr << "The size of the Baseline image and Test image do not match!" << std::endl;
@@ -145,7 +146,7 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
 
   double status = diff->GetTotalDifference();
 
-  
+
   if (reportErrors)
     {
     typedef itk::RescaleIntensityImageFilter<ImageType,OutputType> RescaleType;
@@ -163,7 +164,7 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
 
     RegionType region;
     region.SetIndex(index);
-    
+
     size = rescale->GetOutput()->GetLargestPossibleRegion().GetSize();
     for (unsigned int i = 2; i < ITK_TEST_DIMENSION_MAX; i++)
       {
@@ -184,8 +185,8 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
       std::cout << status;
       std::cout <<  "</DartMeasurement>" << std::endl;
 
-      ::itk::OStringStream diffName;
-        diffName << testImageFilename << ".diff.png";
+      std::ostringstream diffName;
+      diffName << testImageFilename << ".diff.png";
       try
         {
         rescale->SetInput(diff->GetOutput());
@@ -209,7 +210,7 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
       std::cout << diffName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
       }
-    ::itk::OStringStream baseName;
+    std::ostringstream baseName;
     baseName << testImageFilename << ".base.png";
     try
       {
@@ -234,7 +235,7 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
     std::cout << baseName.str();
     std::cout << "</DartMeasurementFile>" << std::endl;
 
-    ::itk::OStringStream testName;
+    std::ostringstream testName;
     testName << testImageFilename << ".test.png";
     try
       {

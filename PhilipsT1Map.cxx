@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,6 +35,15 @@
 #include "vnl/vnl_vector_fixed.h"
 #include <algorithm>
 
+namespace itk
+{
+const char *const PAR_MaxNumberOfCardiacPhases = "PAR_MaxNumberOfCardiacPhases";
+const char *const PAR_NumberOfImageTypes = "PAR_NumberOfImageTypes";
+const char *const PAR_ImageTypes = "PAR_ImageTypes";
+const char *const PAR_ScanningSequenceImageTypeRescaleValues =
+  "PAR_ScanningSequenceImageTypeRescaleValues";
+const char *const PAR_TriggerTimes = "PAR_TriggerTimes";
+}
 int main(int argc, char **argv)
 {
   if( argc < 6 )
@@ -59,11 +68,11 @@ int main(int argc, char **argv)
   typedef itk::Image< float, 4 > ImageType4D;
   typedef itk::Image< float, 3 > ImageType;
 
-  typedef itk::PhilipsRECImageIO 
+  typedef itk::PhilipsRECImageIO
     PhilipsRECImageIOType;
   typedef itk::MRT1ParameterMap3DImageFilter< ImageType::PixelType >
     MRT1ParameterMap3DImageFilterType;
-  typedef itk::VectorIndexSelectionCastImageFilter< 
+  typedef itk::VectorIndexSelectionCastImageFilter<
     MRT1ParameterMap3DImageFilterType::OutputImageType, ImageType >
     VectorIndexSelectionCastImageFilterType;
   typedef itk::ImageFileReader< PhilipsImageType4D >
@@ -165,7 +174,7 @@ int main(int argc, char **argv)
 
   // Get the image dimensions and make sure that
   // there exists at least numberOfTimePoints image
-  // volumes.  It's possible to have more if the 
+  // volumes.  It's possible to have more if the
   // REC file contains more than one image type
   // (i.e. magnitude, phase, real, imaginary, etc.)
   dims[0] = imageIO->GetDimensions(0);
@@ -198,7 +207,7 @@ int main(int argc, char **argv)
   // Need image 4 (corrected real image) for inversion recovery/Look-Locker
   // fit type.
   if( (algorithm == MRT1ParameterMap3DImageFilterType::INVERSION_RECOVERY) ||
-    (algorithm == 
+    (algorithm ==
       MRT1ParameterMap3DImageFilterType::INVERSION_RECOVERY_3PARAM) ||
     (algorithm == MRT1ParameterMap3DImageFilterType::LOOK_LOCKER) )
     {
@@ -250,10 +259,10 @@ int main(int argc, char **argv)
     std::cerr << " pointer from meta dictionary" << std::endl;
     return 1;
     }
-  // All of the images we need should be located in the first scanning 
+  // All of the images we need should be located in the first scanning
   // sequence or scanning sequence 0.
-  PhilipsRECImageIOType::ImageTypeRescaleValuesContainerType::Pointer 
-    rescaleValueVector = scanSequenceImageTypeRescaleValues->ElementAt(0); 
+  PhilipsRECImageIOType::ImageTypeRescaleValuesContainerType::Pointer
+    rescaleValueVector = scanSequenceImageTypeRescaleValues->ElementAt(0);
   if( !rescaleValueVector )
     {
     std::cerr << "Received NULL rescale values vector pointer from";
@@ -262,7 +271,7 @@ int main(int argc, char **argv)
     }
 
   // Get trigger times.
-  PhilipsRECImageIOType::TriggerTimesContainerType::Pointer ptrToTimePoints = 
+  PhilipsRECImageIOType::TriggerTimesContainerType::Pointer ptrToTimePoints =
     NULL;
   if(!itk::ExposeMetaData<
     PhilipsRECImageIOType::TriggerTimesContainerType::Pointer>
@@ -304,17 +313,17 @@ int main(int argc, char **argv)
   ShiftScaleInPlaceImageFilterType::Pointer shiftAndScale = NULL;
   PhilipsRECImageIOType::ImageTypeRescaleValuesType rescaleValues;
   if((algorithm == MRT1ParameterMap3DImageFilterType::INVERSION_RECOVERY) ||
-    (algorithm == MRT1ParameterMap3DImageFilterType::INVERSION_RECOVERY_3PARAM) 
+    (algorithm == MRT1ParameterMap3DImageFilterType::INVERSION_RECOVERY_3PARAM)
     || (algorithm == MRT1ParameterMap3DImageFilterType::LOOK_LOCKER) )
     {
     // Corrected image should be at location 4, based
     // on the image type, which is 4.
-    rescaleValues = rescaleValueVector->ElementAt(4); 
+    rescaleValues = rescaleValueVector->ElementAt(4);
     }
   else
     {
     // Magnitude image will be the first image volume.
-    rescaleValues = rescaleValueVector->ElementAt(0); 
+    rescaleValues = rescaleValueVector->ElementAt(0);
     }
   if( (rescaleValues[2] != 0) && //scale slope (SS)
     (rescaleValues[1] != 0) ) //rescale slope (RS)
@@ -334,7 +343,7 @@ int main(int argc, char **argv)
     }
 
   // Create T1 mapping class.
-  MRT1ParameterMap3DImageFilterType::Pointer t1Map = 
+  MRT1ParameterMap3DImageFilterType::Pointer t1Map =
     MRT1ParameterMap3DImageFilterType::New();
   // Select the fit type.
   switch(algorithm)
@@ -382,10 +391,10 @@ int main(int argc, char **argv)
 
   // Extract the volumes and set to T1 map filter.
   // Convert time values to seconds.
-  ExtractImageFilterContainerType::Pointer extractVOI = 
+  ExtractImageFilterContainerType::Pointer extractVOI =
     ExtractImageFilterContainerType::New();
   extractVOI->resize(numberOfTimePoints);
-  MaskImageFilterContainerType::Pointer maskFilterContainer 
+  MaskImageFilterContainerType::Pointer maskFilterContainer
     = MaskImageFilterContainerType::New();
   maskFilterContainer->resize(numberOfTimePoints);
   ExtractImageFilterType::InputImageRegionType extractionRegion;
@@ -401,9 +410,9 @@ int main(int argc, char **argv)
   extractionIndex[3] = 0;
   extractionRegion.SetSize(extractionSize);
   // Generate a mask using the magnitude image.
-  ExtractPhilipsImageFilterType::Pointer magnitudeImage = 
+  ExtractPhilipsImageFilterType::Pointer magnitudeImage =
     ExtractPhilipsImageFilterType::New();
-  ThresholdImageFilterType::Pointer magnitudeMask 
+  ThresholdImageFilterType::Pointer magnitudeMask
     = ThresholdImageFilterType::New();
   magnitudeImage->SetInput(baselineReader->GetOutput());
   extractionRegion.SetIndex(extractionIndex);
@@ -424,10 +433,10 @@ int main(int argc, char **argv)
 
   // Extract volumes according to algorithm type.
   if( (algorithm == MRT1ParameterMap3DImageFilterType::INVERSION_RECOVERY) ||
-    (algorithm == MRT1ParameterMap3DImageFilterType::INVERSION_RECOVERY_3PARAM) 
+    (algorithm == MRT1ParameterMap3DImageFilterType::INVERSION_RECOVERY_3PARAM)
     || (algorithm == MRT1ParameterMap3DImageFilterType::LOOK_LOCKER) )
     {
-    // Corrected real image is after the magnitude and real images in first 
+    // Corrected real image is after the magnitude and real images in first
     // scanning sequence.
     for(unsigned int i=0; i<numberOfTimePoints; i++)
       {
@@ -441,7 +450,7 @@ int main(int argc, char **argv)
         extractVOI->ElementAt(i)->GetOutput());
       maskFilterContainer->ElementAt(i)->SetInput2(magnitudeMask->GetOutput());
       // convert to seconds
-      t1Map->AddMRImage(ptrToTimePoints->ElementAt(i)/1000.0f, 
+      t1Map->AddMRImage(ptrToTimePoints->ElementAt(i)/1000.0f,
         maskFilterContainer->ElementAt(i)->GetOutput());
       }
     }
@@ -460,13 +469,13 @@ int main(int argc, char **argv)
       extractionRegion.SetIndex(extractionIndex);
       extractVOI->ElementAt(i)->SetExtractionRegion(extractionRegion);
       // convert to seconds
-      t1Map->AddMRImage(ptrToTimePoints->ElementAt(i)/1000.0f, 
+      t1Map->AddMRImage(ptrToTimePoints->ElementAt(i)/1000.0f,
         maskFilterContainer->ElementAt(i)->GetOutput());
       }
     }
 
   // Extract each output component and write to disk.
-  VectorIndexSelectionCastImageFilterType::Pointer extractComp = 
+  VectorIndexSelectionCastImageFilterType::Pointer extractComp =
     VectorIndexSelectionCastImageFilterType::New();
   extractComp->SetInput(t1Map->GetOutput());
   WriterType::Pointer writer = WriterType::New();
@@ -520,6 +529,6 @@ int main(int argc, char **argv)
     std::cerr << "Error during write of " << outputRSquaredFilename << std::endl;
     return 1;
     }
-    
+
   return 0;
 }

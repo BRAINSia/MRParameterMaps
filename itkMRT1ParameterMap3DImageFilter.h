@@ -9,10 +9,10 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
- 
+
   Contributor(s):
 
 =========================================================================*/
@@ -31,18 +31,18 @@ namespace itk
  * \brief Generate a 3D MR T1 parameter map using multiple images.
  *
  * This filter is templated over the input pixel type and the output pixel
- * type. The input T1-weighted MR images must all have the same size and 
- * dimensions.  The 3D \c VectorImage output will have four components.  
- * \c VectorImageToImageAdaptor should be used to extract the various 
+ * type. The input T1-weighted MR images must all have the same size and
+ * dimensions.  The 3D \c VectorImage output will have four components.
+ * \c VectorImageToImageAdaptor should be used to extract the various
  * components for viewing or saving to file.
  *
  * Given multiple T1-weighted MR images and a vector of TR (saturation
- * recovery) times or TI times (inversion recovery), generate the T1 or 
- * R1 parameter map.  The exponential fitting function may be changed 
+ * recovery) times or TI times (inversion recovery), generate the T1 or
+ * R1 parameter map.  The exponential fitting function may be changed
  * using the \c SetAlgorithm function.
  *
  * \par Inputs and Usage
- * There are two ways to use this class. When you have multiple images 
+ * There are two ways to use this class. When you have multiple images
  * you would use the class as
  * \code
  *       filter->AddMRImage( time1, image1 );
@@ -51,7 +51,7 @@ namespace itk
  * \endcode
  *
  * \par
- * When you have the 'n' MR images in a single multi-component image 
+ * When you have the 'n' MR images in a single multi-component image
  * (VectorImage), you can specify the images simply as
  * \code
  *       filter->SetMRImage( timeContainer, vectorImage );
@@ -59,33 +59,33 @@ namespace itk
  *
  * \par Outputs
  * The output image is a vector image containing 4 values:
- * The first component of the output will be the T1 time in seconds (R1 in Hz), 
+ * The first component of the output will be the T1 time in seconds (R1 in Hz),
  * the second component will be the constant A as shown in the functions below,
  * and the fourth component will be the r-squared value from the curve fitting.
- * The third component will vary depending on the type of T1 fitting selected.  
- * For all of the 2 parameter models below the third component will be zero.  
- * For the remaining models the third component will be the value B as shown 
- * below. 
- * 
+ * The third component will vary depending on the type of T1 fitting selected.
+ * For all of the 2 parameter models below the third component will be zero.
+ * For the remaining models the third component will be the value B as shown
+ * below.
+ *
  * IDEAL_STEADY_STATE (Non-linear least squares using Levenberg-Marquardt):
  * S = A(1-e^-(TR/T1))
  *
- * HYBRID_STEADY_STATE_3PARAM (Non-linear least squares using 
+ * HYBRID_STEADY_STATE_3PARAM (Non-linear least squares using
  * Levenberg-Marquardt):
  * S = A(B-e^-(TR/T1))
  *
  * INVERSION_RECOVERY (Non-linear least squares using Levenberg-Marquardt):
  * S = A(1-2e^-(TI/T1))
  *
- * INVERSION_RECOVERY_3PARAM (Non-linear least squares using 
+ * INVERSION_RECOVERY_3PARAM (Non-linear least squares using
  * Levenberg-Marquardt):
  * S = A(1-Be^-(TI/T1))
  *
- * ABSOLUTE_INVERSION_RECOVERY (Non-linear least squares using 
+ * ABSOLUTE_INVERSION_RECOVERY (Non-linear least squares using
  * Levenberg-Marquardt):
  * S = abs(A(1-2e^-(TI/T1)))
  *
- * ABSOLUTE_INVERSION_RECOVERY_3PARAM (Non-linear least squares using 
+ * ABSOLUTE_INVERSION_RECOVERY_3PARAM (Non-linear least squares using
  * Levenberg-Marquardt):
  * S = abs(A(1-Be^-(TI/T1)))
  *
@@ -109,20 +109,20 @@ namespace itk
  *
  * \ingroup Multithreaded
  *
- * \author Don Bigler, Center for Nuclear Magnetic Resonance Research, 
+ * \author Don Bigler, Center for Nuclear Magnetic Resonance Research,
  * Penn State Milton S. Hershey Medical Center
  *
  */
 template< class TMRImagePixelType, class TMRParameterMapImagePixelType=double >
 class ITK_EXPORT MRT1ParameterMap3DImageFilter:
-    public ImageToImageFilter<Image< TMRImagePixelType, 3 >, 
+    public ImageToImageFilter<Image< TMRImagePixelType, 3 >,
                               VectorImage< TMRParameterMapImagePixelType, 3 > >
 {
 public:
   /** Standard class typedefs. */
   typedef MRT1ParameterMap3DImageFilter              Self;
-  typedef ImageToImageFilter<Image< TMRImagePixelType, 3 >, 
-          VectorImage< TMRParameterMapImagePixelType, 3 > >  
+  typedef ImageToImageFilter<Image< TMRImagePixelType, 3 >,
+          VectorImage< TMRParameterMapImagePixelType, 3 > >
                                                      Superclass;
   typedef SmartPointer<Self>                         Pointer;
   typedef SmartPointer<const Self>                   ConstPointer;
@@ -132,8 +132,8 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(MRT1ParameterMap3DImageFilter, ImageToImageFilter);
-  
-  
+
+
   typedef TMRImagePixelType                          MRPixelType;
   typedef typename VectorImage< TMRParameterMapImagePixelType, 3 >::PixelType
                                                      MRParameterMapPixelType;
@@ -141,12 +141,12 @@ public:
 
   /** T1-weighted MR image data. */
   typedef typename Superclass::InputImageType        MRImageType;
-  
-  /** An alternative typedef defining one (of the many) images. 
-   * It will be assumed that the vectorImage has a vector length 
+
+  /** An alternative typedef defining one (of the many) images.
+   * It will be assumed that the vectorImage has a vector length
    * parameter of \c n (number of time points) */
   typedef VectorImage< MRPixelType, 3 >              MRImagesType;
-  
+
   typedef typename Superclass::OutputImageType       MRParameterMapImageType;
   typedef MRParameterMapImageType                    OutputImageType;
   typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
@@ -162,8 +162,8 @@ public:
   void AddMRImage( TimeType, const MRImageType *image);
 
   /** Another set method to add a time point (in seconds) and its corresponding
-   * image. The image here is a VectorImage. The user is expected to pass the 
-   * times in a container. The ith element of the container corresponds 
+   * image. The image here is a VectorImage. The user is expected to pass the
+   * times in a container. The ith element of the container corresponds
    * to the time of the ith component image of the VectorImage. */
   void SetMRImage( TimeContainerType *, const MRImagesType *image);
 
@@ -176,21 +176,21 @@ public:
   static const int HYBRID_STEADY_STATE_3PARAM = 5;
   static const int INVERSION_RECOVERY_3PARAM = 6;
   static const int ABSOLUTE_INVERSION_RECOVERY_3PARAM = 7;
-  
+
   /** Set/Get the T1 fitting algorithm (default is IDEAL_STEADY_STATE). */
   itkSetMacro(Algorithm, int);
   itkGetMacro(Algorithm, int);
-  
+
   /** Set/Get the maximum T1 time (default is 10.0). */
   itkSetMacro(MaxT1Time, TimeType);
   itkGetMacro(MaxT1Time, TimeType);
-    
-  /** Set/Get whether to perform R1 mapping instead of T21 mapping (default is 
-  /* false). */
+
+  /** Set/Get whether to perform R1 mapping instead of T21 mapping (default is
+   * false). */
   itkSetMacro( PerformR1Mapping, bool );
   itkGetConstReferenceMacro( PerformR1Mapping, bool );
   itkBooleanMacro( PerformR1Mapping );
-  
+
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(MREchoPixelConvertibleToDoubleCheck,
@@ -199,36 +199,36 @@ public:
     (Concept::Convertible<MRParameterPixelType, double>));
  /** End concept checking */
 #endif
-  
+
 protected:
   MRT1ParameterMap3DImageFilter();
   ~MRT1ParameterMap3DImageFilter() {};
   void PrintSelf(std::ostream& os, Indent indent) const;
-  
-  void FitIdealSteadyState(ExponentialFitType X, ExponentialFitType Y, 
+
+  void FitIdealSteadyState(ExponentialFitType X, ExponentialFitType Y,
       unsigned int num, MRParameterMapPixelType &output);
-  void FitHybridSteadyState3Param(ExponentialFitType X, ExponentialFitType Y, 
+  void FitHybridSteadyState3Param(ExponentialFitType X, ExponentialFitType Y,
       unsigned int num, MRParameterMapPixelType &output);
-  void FitInversionRecovery(ExponentialFitType X, ExponentialFitType Y, 
+  void FitInversionRecovery(ExponentialFitType X, ExponentialFitType Y,
       unsigned int num, MRParameterMapPixelType &output);
-  void FitInversionRecovery3Param(ExponentialFitType X, ExponentialFitType Y, 
+  void FitInversionRecovery3Param(ExponentialFitType X, ExponentialFitType Y,
       unsigned int num, MRParameterMapPixelType &output);
-  void FitAbsoluteInversionRecovery(ExponentialFitType X, ExponentialFitType Y, 
+  void FitAbsoluteInversionRecovery(ExponentialFitType X, ExponentialFitType Y,
       unsigned int num, MRParameterMapPixelType &output);
-  void FitAbsoluteInversionRecovery3Param(ExponentialFitType X, 
+  void FitAbsoluteInversionRecovery3Param(ExponentialFitType X,
       ExponentialFitType Y, unsigned int num, MRParameterMapPixelType &output);
-  void FitLookLocker(ExponentialFitType X, ExponentialFitType Y, 
+  void FitLookLocker(ExponentialFitType X, ExponentialFitType Y,
       unsigned int num, MRParameterMapPixelType &output);
-  void FitAbsoluteLookLocker(ExponentialFitType X, ExponentialFitType Y, 
+  void FitAbsoluteLookLocker(ExponentialFitType X, ExponentialFitType Y,
       unsigned int num, MRParameterMapPixelType &output);
-  
+
   /** Setup vector image vector length. */
   virtual void GenerateOutputInformation();
-  
+
   void BeforeThreadedGenerateData();
-  void ThreadedGenerateData( const 
-      OutputImageRegionType &outputRegionForThread, int);
-  
+  void ThreadedGenerateData( const
+      OutputImageRegionType &outputRegionForThread, ThreadIdType);
+
   /** enum to indicate if the MR echo image is specified as a single multi-
    * component image or as several separate images */
   typedef enum
@@ -243,11 +243,11 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   int      m_Algorithm;
-  
+
   TimeType m_MaxT1Time;
-  
+
   bool     m_PerformR1Mapping;
-  
+
   /** container to hold the time points */
   TimeContainerType::Pointer m_TimeContainer;
 
@@ -259,11 +259,11 @@ private:
 
 };
 
-  
+
 } // end namespace itk
-  
+
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkMRT1ParameterMap3DImageFilter.txx"
 #endif
-  
+
 #endif
