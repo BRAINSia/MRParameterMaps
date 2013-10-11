@@ -1,0 +1,550 @@
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp/gefi_tomo.ppg"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/gefi_tomo.ppg,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Revision: 3.14 $
+; Revision 1.2  1996/04/04  07:50:54  fe
+; introduced 3D option, DWE
+;
+; Revision 1.1  1996/02/13  07:54:26  appadmin
+; Autocheckin during RCSinit
+;
+; Revision 1.1  1996/01/09  09:30:15  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+
+;gefi_tomo.ppg
+;written by HL 9.1.96
+
+preset off
+"l1 = ds"
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp//DBX.include"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/DBX.include,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Revision: 3.3 $
+; Revision 1.2  1996/02/01  07:44:13  fe
+; removed dublicated RCS header
+;
+; Revision 1.1  1996/01/09  10:03:28  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+;DBX.include
+define delay aqq
+"aqq = dw * td"
+
+# 33 "/Pv2.1/exp/stan/nmr/lists/pp/gefi_tomo.ppg"
+
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp//MEDSPEC.include"
+;MEDSPEC.include
+
+	if (Coil_operation == Single_Coil)
+	  {
+          2u setnmr3|11           ;Single-Coil-Operation
+	  }
+	if (Coil_operation == Cross_Coil)
+	  {
+          2u setnmr3^11           ;Cross-Coil-Operation
+	  }
+
+
+         if(AQ_mod == qdig)	;if statement for DQD
+	   {			;
+	    fq1b receive	;pulse program command for DQD
+	   }			;end of if statement for DQD
+# 35 "/Pv2.1/exp/stan/nmr/lists/pp/gefi_tomo.ppg"
+start,	2m
+if(IMND_evolution_trigger)
+{
+if(ACQ_scan_type==Scan_Experiment)
+{
+	10u
+	10u	setnmr3|8	;trigger enable on
+	10u	trigpl1		;wait for trigger input TRIG0 negative edge
+	10u	setnmr3^8	;trigger enable off, continue
+}
+}
+start1,	10u
+if (ACQ_trigger_enable)
+{
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp/trigger"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/trigger,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Log: trigger,v $
+; Revision 3.3  1997/09/30 14:01:58  gh
+; Update from methods group
+;
+; Revision 1.3  1996/05/09  12:38:33  hl
+; changed trign1 to trigpl1
+;
+; Revision 1.2  1996/04/04  08:12:13  fe
+; removed curly brackets
+;
+; Revision 1.1  1996/02/13  07:54:51  appadmin
+; Autocheckin during RCSinit
+;
+; Revision 1.1  1996/01/09  09:30:15  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+
+  ;trigger module
+	10u
+	10u	setnmr3|8	;trigger enable on
+	10u	trigpl1	
+	10u	setnmr3^8	;trigger enable off, continue
+        d7
+# 50 "/Pv2.1/exp/stan/nmr/lists/pp/gefi_tomo.ppg"
+}
+slice, 2m	fq8b:f1
+if(IMND_mtcflag)
+{
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp/mtc"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/mtc,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Log: mtc,v $
+; Revision 3.3  1997/09/30 14:01:50  gh
+; Update from methods group
+;
+; Revision 1.2  1996/04/23  10:03:33  fe
+; inserted correct DBX PPG, with correct loop structure
+;
+;
+; Revision 1.1  1996/01/09  09:30:15  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+
+;
+ ; mtc module
+ ;
+ ; dwe 6/4/95
+ ;
+        300u
+	d8	fq3:f1
+    mtc,d12	gatepulse 1
+		p12:sp4	ph0
+        lo to mtc times l12
+
+# 55 "/Pv2.1/exp/stan/nmr/lists/pp/gefi_tomo.ppg"
+}
+if(IMND_suppression)
+{
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp/watersup"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/watersup,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Log: watersup,v $
+; Revision 3.3  1997/09/30 14:02:00  gh
+; Update from methods group
+;
+; Revision 1.2  1996/06/28  06:28:18  dwe
+; update dbx version.
+;
+; Revision 1.1  1996/02/13  07:54:54  appadmin
+; Autocheckin during RCSinit
+;
+; Revision 1.1  1996/01/09  09:30:15  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+
+ ;water suppression module
+ ;
+ ;dwe 6/4/95
+ ;
+    15m:ngrad 
+    4m:ngrad  
+  wpuls,d8   fq3:f1
+	5u
+        p10:sp2
+        15m:ngrad
+        4m:ngrad
+        lo to wpuls times 3
+
+# 59 "/Pv2.1/exp/stan/nmr/lists/pp/gefi_tomo.ppg"
+}
+if(IMND_fatflag)
+{
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp/fat"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/fat,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Log: fat,v $
+; Revision 3.4  1997/09/30 14:01:41  gh
+; Update from methods group
+;
+; Revision 1.3  1996/11/08  12:10:27  dwe
+; include fat spoiler.
+;
+; Revision 1.2  1996/08/29  12:52:44  dwe
+; modify dbx version.
+;
+; Revision 1.1  1996/02/13  07:54:11  appadmin
+; Autocheckin during RCSinit
+;
+; Revision 1.1  1996/01/09  09:30:15  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+
+  ;fat suppression module
+  ;
+  ;dwe 6/4/95
+  ;
+     1m     fq3:f1
+     d8	    gatepulse 1
+     p11:sp3
+        5m:ngrad
+        d4:ngrad
+# 63 "/Pv2.1/exp/stan/nmr/lists/pp/gefi_tomo.ppg"
+}
+if(IMND_invflag )
+{
+		200u
+		200u
+		d4:ngrad
+inclist1,   20u		fq1:f1
+			lo to inclist1 times l11
+		d8 gatepulse 1
+		p14:sp6	ph2		;Inversion
+		4m
+		d4:ngrad
+		if(L[10]>0)
+		{
+inclist2,   20u		fq1:f1
+			lo to inclist2 times l10
+		}
+	    d19				;Correction-Time
+}
+if(IMND_FovSat_flag)
+{
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp/fovsat"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/fovsat,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Log: fovsat,v $
+; Revision 3.3  1997/09/30 14:01:42  gh
+; Update from methods group
+;
+; Revision 1.1  1996/02/13  07:54:14  appadmin
+; Autocheckin during RCSinit
+;
+; Revision 1.1  1996/01/09  09:30:15  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+
+   ;fov saturation module 
+   ;
+   ;dwe 6/4/95
+   ; 
+	200u 
+fov,    d4:ngrad	fq3:f1
+    	d8		gatepulse 1
+        p13:sp5		ph0
+        4m:ngrad
+        lo to fov times l13
+        d4:ngrad	ph0
+
+# 85 "/Pv2.1/exp/stan/nmr/lists/pp/gefi_tomo.ppg"
+}
+if(IMND_InflowSat_flag)
+{
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp/inflowsat"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/inflowsat,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Log: inflowsat,v $
+; Revision 3.3  1997/09/30 14:01:45  gh
+; Update from methods group
+;
+; Revision 1.1  1996/02/13  07:54:30  appadmin
+; Autocheckin during RCSinit
+;
+; Revision 1.1  1996/01/09  09:30:15  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+
+  ;inflow saturation module
+  ;
+  ;dwe 6/4/95
+  ;
+inflow,	d4:ngrad	fq2:f1
+       	d8		gatepulse 1
+       	p14:sp7		ph0
+       	4m:ngrad
+	lo to inflow times l14
+	d4:ngrad	ph0
+	
+# 89 "/Pv2.1/exp/stan/nmr/lists/pp/gefi_tomo.ppg"
+}
+if(!IMND_invflag)
+{	
+	200u
+}
+
+        2m:ngrad   	fq1:f1
+if(IMND_rf_spoil == No)
+	{
+	   d4:ngrad	gatepulse 1
+	   p1:sp0	ph0
+	   d4:ngrad
+	   10u
+	   d6:ngrad	ph0
+	}
+if(IMND_rf_spoil == Yes)
+	{
+	   d4:ngrad	gatepulse 1
+	   p1:sp0	ph4		;+90-Grad
+	   d4:ngrad
+	   10u
+	   d6:ngrad	ph5
+	}
+        d4:ngrad			;read on
+        10u
+if(IMND_TE_long)
+	{
+	    d10:ngrad
+	    d4:ngrad
+            10u
+            d6:ngrad
+            d4:ngrad			;read on
+            10u
+	}
+	d4:ngrad:e	syrec		;read grad
+if(IMND_rf_spoil == No)
+	{
+	   if (CONFIG_dual_dds == No_dual_DDS)
+	   {
+              100u:e	syrec           ;stabil.delay
+	      aqq	adc ph0
+	   }
+	   if (CONFIG_dual_dds != No_dual_DDS)
+	   {
+              100u:e    fqatofqb:f1     ;stabil.delay
+	      aqq	adc ph0
+	   }
+	}
+if(IMND_rf_spoil == Yes)
+	{
+	  if (CONFIG_dual_dds == No_dual_DDS)
+	  {
+	    100u:e	syrec		;stabil.delay
+	    aqq		adc
+	  }
+	  if (CONFIG_dual_dds != No_dual_DDS)
+	  {
+	    100u:e	fqatofqb:f1	;stabil.delay
+	    aqq		adc
+	  }
+	}
+if(IMND_grad_refo)
+{
+d6:ngrad			;phase.t3
+d4
+d4
+}
+10u eoscnp
+10u tofqa:f1
+10u		ph0
+d20:ngrad			;spoiler off
+d21:ngrad
+
+if(IMND_auto_adv)
+{
+if(l15)
+{
+fq1loop,	1u	fq1:f1
+1u
+5u	fq8b:f1
+1u
+if(IMND_InflowSat_flag)
+{
+1u	fq2:f1
+5u
+if(L[16]==2)
+{
+1u	fq2:f1
+5u
+}
+}
+5u
+lo to fq1loop times l15
+}
+}
+2.5u
+	lo to slice times NSLICES	      ;Slice-Loop
+	5u		rpp0 rp1
+        lo to slice times l26                 ;Movie-Loop
+        4u
+	lo to start1 times NA               ;Averaging-Loop
+	5u		ipp4
+	5u		ipp5
+	if "l1 == 0" goto skip
+	"l1 = l1 - 1"
+	goto start1
+skip,	5u
+        lo to start1 times ACQ_size[1]      ;2D-Loop
+	5u
+	lo to start1 times l17              ;3D-Loop
+	vd	ivd
+if(IMND_auto_adv)
+{
+1u	fq1:f1
+1u
+5u	fq8b:f1
+1u
+if(IMND_InflowSat_flag)
+{
+5u	fq2:f1
+5u
+if(L[16] == 2)
+{
+5u	fq2:f1
+5u
+}
+}
+}
+	lo to start times NR              ;Evolution-Loop
+	5u
+	goto start
+exit
+
+ph0 = 0
+ph1 = 1
+ph2 = 2
+ph3 = 3
+ph4 = (360) 0 117 351 342 90 315 297 36 252 225 315 162 126 207 45 0
+            72 261 207 90 27 81 252 180 225 27 306 342 135 45 72 216
+            117 135 270 162 171 297 180 180 297 171 162 270 135 342 306 27
+            225 180 252 81 27 90 270 207 261 72 0 45 207 126 162 315
+            225 252 36 297 315 90 342 351 117 0 0 117 351 342 90 315
+            297 36 252 225 315 162 126 207 45 0 72 261 207 270 90 27
+            81 252 180 225 27 306 342 135 45 72 216 117 135 270 162 171
+            297 180 180 297 171 162 270 135 117 216 72 45 135 342 306 27
+            225 180 252 81 27 90 270 207 261 72 0 45 207 126 162 315
+            225 252 36 297 315 90 342 351 117 0 0 351 342 90 315 297
+            36 252 225 315 162 126 207 45 0 72 261 207 270 90 27 81
+            252 180 225 27 306 342 135 45 72 216 117 135 270 162 171 297
+            180 180 297 171 162 270 135 117 216 72 45 135 342 306 27 225
+            180 252 81 27 90 270 207 261 72 0 45 207 126 162 315 225
+            252 36 297 315 90 342 351 117 0 0 117 351 342 90 315 342
+
+ph5 = (360) 0 117 351 342 90 315 297 36 252 225 315 162 126 207 45 0
+            72 261 207 90 27 81 252 180 225 27 306 342 135 45 72 216
+            117 135 270 162 171 297 180 180 297 171 162 270 135 342 306 27
+            225 180 252 81 27 90 270 207 261 72 0 45 207 126 162 315
+            225 252 36 297 315 90 342 351 117 0 0 117 351 342 90 315
+            297 36 252 225 315 162 126 207 45 0 72 261 207 270 90 27
+            81 252 180 225 27 306 342 135 45 72 216 117 135 270 162 171
+            297 180 180 297 171 162 270 135 117 216 72 45 135 342 306 27
+            225 180 252 81 27 90 270 207 261 72 0 45 207 126 162 315
+            225 252 36 297 315 90 342 351 117 0 0 351 342 90 315 297
+            36 252 225 315 162 126 207 45 0 72 261 207 270 90 27 81
+            252 180 225 27 306 342 135 45 72 216 117 135 270 162 171 297
+            180 180 297 171 162 270 135 117 216 72 45 135 342 306 27 225
+            180 252 81 27 90 270 207 261 72 0 45 207 126 162 315 225
+            252 36 297 315 90 342 351 117 0 0 117 351 342 90 315 342
+

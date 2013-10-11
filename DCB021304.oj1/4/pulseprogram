@@ -1,0 +1,155 @@
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp/msme_vtr2.ppg"
+;msme_vtr2.ppg
+;
+; AVANCE Pulse program for Multi-slice multi-echo imaging with
+; variable repetition time.
+;  MSME revised so that phase encode is not on during long TE delays
+;  and gradients are switched on / off (as a pair) before next gradient
+;  this doubles the number of gradient points.
+;
+; Written by MM: 3/30/94
+; Last modified:
+;	RER: Fri Sep 15 08:46:05 EDT 1995 - impl. Dual DDS
+;       RER: Tue Feb  6 20:48:39 EST 1996 - converted to AVANCE style
+;	RER: Thu May 25 10:34:39 CDT 2000 - implemented DQD
+;	RER: Thu Feb 14 14:55:36 EST 2002 - implemented RARE encoding
+
+preset off
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp//DBX.include"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/DBX.include,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Revision: 3.3 $
+; Revision 1.2  1996/02/01  07:44:13  fe
+; removed dublicated RCS header
+;
+; Revision 1.1  1996/01/09  10:03:28  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+;DBX.include
+define delay aqq
+"aqq = dw * td"
+
+# 18 "/Pv2.1/exp/stan/nmr/lists/pp/msme_vtr2.ppg"
+define delay dh
+"dh = d4 / 2"
+;"l11 = ACQ_size[1]/ACQ_rare_factor"
+"l1 = ds"
+
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp//MEDSPEC.include"
+;MEDSPEC.include
+
+	if (Coil_operation == Single_Coil)
+	  {
+          2u setnmr3|11           ;Single-Coil-Operation
+	  }
+	if (Coil_operation == Cross_Coil)
+	  {
+          2u setnmr3^11           ;Cross-Coil-Operation
+	  }
+
+
+         if(AQ_mod == qdig)	;if statement for DQD
+	   {			;
+	    fq1b receive	;pulse program command for DQD
+	   }			;end of if statement for DQD
+# 24 "/Pv2.1/exp/stan/nmr/lists/pp/msme_vtr2.ppg"
+
+start,  3.0m 
+start1,  10u
+	if (ACQ_trigger_enable) {
+	  10u	setnmr3|8
+	  10u	trigpl1
+	  10u	setnmr3^8
+	  d7
+	}                       ;                    pt   R   P   S
+slice,	d4:ngrad   	    	;spoiling grad.      1  100   0   0
+	2.0m            fq8b:f1
+	d4:ngrad   	fq1:f1	;all grads off       2   0    0   0
+	d4:ngrad gatepulse 1    ;slice grad          3   0    0  100
+	p1:sp0         ph3
+	d4:ngrad   		;all grads off       4   0    0   0
+	d4:ngrad   		;read.t0  sl.t3      5   t0   0   t3
+	d6
+	d4:ngrad   		;all grads off       6   0    0   0
+	d1            		;TE/2 delay
+echo,   d4:ngrad gatepulse 1   	;slice grad          7   0    0  100
+	p2:sp1         ph2
+	d4:ngrad   		;all grads off       8   0    0   0
+	d4:ngrad  	    	;read.t1 sl.t4 phas  9   t1   t6  t4
+	d6		ph4
+	d4:ngrad   		;all grads off      10   0    0   0
+	if (CONFIG_dual_dds == No_dual_DDS )
+	{
+	 if (NECHOES == 1) {
+	  d2          fq1:f1  	;TE/2 delay
+	 }
+	 if (NECHOES != 1) {
+	  d2            	;TE/2 delay
+	 }
+	 dh:ngrad 	    	;read grad          11  100   0   0
+	 dh:e	syrec
+	 aqq    adc	ph3
+	}
+	if (CONFIG_dual_dds != No_dual_DDS )
+	{
+	 d2            	   	;TE/2 delay
+	 dh:ngrad  fqatofqb:f1 	;read grad          11  100   0   0
+	 dh:e	syrec
+	 aqq    adc     ph3
+	}
+	d4:ngrad   		;all grads off      12   0    0   0
+	d4:ngrad tofqa:f1	;rd.t2,sl.t5,ph.rev 13  t2   t7  t5
+	d6       eoscnp
+	d4:ngrad   		;all grads off      14  0    0   0
+	d2            		;TE/2 delay
+	lo to echo times NECHOES
+	if (ACQ_flipback)
+	{                                     
+	 d4:ngrad  gatepulse 1  ;        	    15  0    0  100
+  	 p2:sp1         ph2
+	 d4:ngrad   		;all grads off      16  0    0   0
+	 d4:ngrad   		;read.t0 slice.t3   17  t0   0   t3
+	 d1
+	 d4:ngrad   		;all grads off      18  0    0   0
+	 d4:ngrad gatepulse 1  	;slice grad         19  0    0  100
+	 p1:sp0         ph1
+	 d4:ngrad   		;all grads off      20  0    0   0
+	}
+	d4:ngrad   		;all grads off      21  0    0   0
+        vd			;variable repetition delay
+	lo to slice times NSLICES
+	2.5u      ipp0 ipp1 ip3*2
+	lo to start1 times NA
+	2.5u     rpp0 rpp1 rp3
+
+        5u
+        if "l1 == 0" goto skip
+        "l1 = l1 - 1"
+        goto start1
+skip,	lo to start times l11	; # phase encode steps / ACQ_rare_factor
+	2.5m	ivd
+	lo to start times NR	; Multi-T1 loop
+	5u
+	goto start
+exit
+
+ph0 = 0 2
+ph1 = 2 0
+ph2 = 1
+ph3 = 0
+ph4 = 0

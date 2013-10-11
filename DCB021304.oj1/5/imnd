@@ -1,0 +1,153 @@
+##TITLE=Parameter List
+##JCAMPDX=4.24
+##DATATYPE=Parameter Values
+##ORIGIN= Bruker Medizintechnik GMBH
+##OWNER=rer
+$$ Fri Feb 13 16:39:59 2004 EST (UT-5h)  rer
+$$ /data2/data/rer/nmr/DCB021304.oj1/5/imnd
+##$IMND_method=( 20 )
+<MSME_VTR>
+##$IMND_dummy_method=MSME_VTR
+##$IMND_nucleus=H_1
+##$IMND_matrix_eq=128
+##$IMND_matrix=( 2 )
+128 128
+##$IMND_sw_h=75757.6
+##$IMND_scout_orient_matrix_curr=( 3, 3 )
+1 0 0 0 1 0 0 0 1
+##$IMND_scout_orient_matrix=( 3, 3 )
+1 0 0 0 1 0 0 0 1
+##$IMND_rep_time=0.5000
+##$IMND_recov_time=500.00
+##$IMND_echo_time=10.0000
+##$IMND_total_time=( 16 )
+<0h1m4s>
+##$IMND_pulse_length=3200.0
+##$IMND_refocus_length=3200.0
+##$IMND_sat_pulse_length=2000.00
+##$IMND_n_averages=1
+##$IMND_flipback=No
+##$IMND_n_echo_images=1
+##$IMND_echo_scan_eq=1
+##$IMND_n_echoes=1
+##$IMND_bii_version=( 120 )
+<VERSION 2.1.1: 28.04.03>
+##$MSME_VTR_resid=( 120 )
+<VERSION 08.04.03>
+##$IMND_n_expts=11
+##$IMND_var_rep_time=( 11 )
+30.00 50.00 100.00 200.00 500.00 1000.00 2000.00 3000.00 4000.00 6000.00 
+10000.00
+
+##$IMND_expt_time=( 16 )
+<0h57m23s>
+##$IMND_inv_delay_storage=300
+##$IMND_dim=2
+##$IMND_patient_pos=Head_Supine
+##$IMND_square_fov_matrix=Square_fov_and_matrix
+##$IMND_isotropic=Fov
+##$IMND_fov_eq=20.00
+##$IMND_fov=( 2 )
+20.00 20.00
+##$IMND_slice_orient=Arbitrary_Oblique
+##$IMND_n_slices=1
+##$IMND_slice_offset=0.00
+##$IMND_slice_sepn_mode=Packages
+##$IMND_slice_thick=10.00
+##$IMND_slice_angle=( 1 )
+90.0
+##$IMND_slice_angle_eq=90.0
+##$IMND_ScoutRel_SgRotAngle_eq=0.0
+##$IMND_ScoutRel_SgTiltAngle_eq=90.0
+##$IMND_ScoutRel_RgRotAngle_eq=90.0
+##$IMND_read_ext=1.00
+##$IMND_read_offset=( 1 )
+0.00
+##$IMND_read_offset_eq=0.00
+##$IMND_slice_scheme=interlaced
+##$IMND_slice_list=( 1 )
+0
+##$IMND_n_slicepacks=1
+##$IMND_slicepack_n_slices=( 1 )
+1
+##$IMND_slicepack_vector=( 1, 3 )
+0 0 1
+##$IMND_slicepack_position=( 1 )
+0.00
+##$IMND_slicepack_gap=( 1 )
+10.50
+##$IMND_read_vector=( 1, 3 )
+0 1 0
+##$IMND_slicepack_read_offset=( 1 )
+0.00
+##$IMND_phase1_offset=( 1 )
+0.00
+##$IMND_anti_alias=( 3 )
+1 1 1
+##$IMND_csind_flag=No
+##$IMND_acq_mode=Spat
+##$IMND_trigger_enable=No
+##$IMND_evolution_trigger=No
+##$IMND_sat_shape=( 16 )
+<sinc3>
+##$IMND_sat_slice_thick_hz=2350
+##$IMND_FovSat_n_slices=0
+##$IMND_FovSat_thick=( 1 )
+10.00
+##$IMND_FovSat_offset=( 1 )
+0.00
+##$IMND_FovSat_dir_vector=( 1, 3 )
+0 1 0
+##$IMND_FovSat_rot_angle=( 1 )
+0.0
+##$IMND_FovSat_tilt_angle=( 1 )
+0.0
+##$IMND_InflowSat_n_slices=0
+##$IMND_InflowSat_thick=( 1 )
+0.00
+##$IMND_InflowSat_slice_offset=( 1 )
+0.00
+##$IMND_InflowSat_dir_int=( 1 )
+0
+##$IMND_InflowSat_dir_trans=( 1 )
+Rel_Foot
+##$IMND_InflowSat_dir_cor=( 1 )
+Rel_Posterior
+##$IMND_InflowSat_dir_sagg=( 1 )
+Rel_Left
+##$IMND_contrast_agent=No
+##$IMND_use_grad=100
+##$IMND_use_rise_time=100
+##$IMND_imag_shape_enum=gauss
+##$IMND_imag_shape=( 16 )
+<gauss>
+##$IMND_sl_thick_hz=515.625
+##$IMND_acq_time=1.68960
+##$IMND_DW_time=6.6
+##$IMND_rep_delay=0.4824000
+##$IMND_nuc1=( 8 )
+<1H>
+##$IMND_bf1=125.4415238
+##$IMND_rcvr_offset_bc=Yes
+##$IMND_isotropic_reco=No
+##$IMND_zf=1
+##$IMND_phase_encoding_mode_1=Linear
+##$IMND_phase_start_1=-1
+##$IMND_grad_offset=150.0
+##$IMND_dscan_time=3
+##$IMND_dscans=100
+##$IMND_derive_gains=No
+##$IMND_reference_gain=17.2
+##$IMND_ref_gain_state=Norm_Pulse_Defined
+##$IMND_rg_defined=No
+##$IMND_EffEchoTime1=10
+##$IMND_NEchoScan1=1
+##$IMND_RareMaxEchoes=1
+##$IMND_flowcomp=Off
+##$IMND_bandwidth_1=75757.6
+##$IMND_ScanSummary=( 512 )
+<>
+##$IMND_invflag=No
+##$IMND_mtcflag=No
+##$IMND_fatflag=No
+##END=

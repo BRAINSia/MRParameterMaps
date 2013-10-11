@@ -1,0 +1,156 @@
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp/msme_mod.ppg"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/msme_mod.ppg,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Revision: 3.3 $
+;
+; Revision 1.1  1996/01/09  09:30:15  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+
+;msme_mod.ppg
+
+;DBX 7.6.95 PV: 
+;last change by KRE 5.1.96 flipback (again) integrated
+
+;AMX/MSLX Pulse program for MSME with variable echo time
+;Written by GG/H.Lehr: Tue Aug  4 11:09:22 GMT 1992
+;with calc. Trims
+
+
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp//DBX.include"
+;****************************************************************
+;
+; $Source: /pv/CvsTree/pv/gen/src/prg/parx_src/imnd/pp.dtomo/DBX.include,v $
+;
+; Copyright (c) 1996
+; Bruker Medizintechnik GmbH
+; D-76275 Ettlingen, Germany
+;
+; All Rights Reserved
+;
+;
+; $Locker:  $
+; $State: Exp $
+; $Revision: 3.3 $
+; Revision 1.2  1996/02/01  07:44:13  fe
+; removed dublicated RCS header
+;
+; Revision 1.1  1996/01/09  10:03:28  appadmin
+; Autocheckin during RCSinit
+;
+;
+;****************************************************************
+;DBX.include
+define delay aqq
+"aqq = dw * td"
+
+# 33 "/Pv2.1/exp/stan/nmr/lists/pp/msme_mod.ppg"
+preset off
+"d12 = d2 / 2"	;DBX
+"d11 = dw * td"
+"d14 = d4 / 2"
+
+
+# 1 "/Pv2.1/exp/stan/nmr/lists/pp//MEDSPEC.include"
+;MEDSPEC.include
+
+	if (Coil_operation == Single_Coil)
+	  {
+          2u setnmr3|11           ;Single-Coil-Operation
+	  }
+	if (Coil_operation == Cross_Coil)
+	  {
+          2u setnmr3^11           ;Cross-Coil-Operation
+	  }
+
+
+         if(AQ_mod == qdig)	;if statement for DQD
+	   {			;
+	    fq1b receive	;pulse program command for DQD
+	   }			;end of if statement for DQD
+# 39 "/Pv2.1/exp/stan/nmr/lists/pp/msme_mod.ppg"
+start,	10u
+	if (ACQ_trigger_enable)
+	{
+	  10u	setnmr3|8
+	  10u	trigpl1
+	  10u	setnmr3^8
+	  d7
+	}
+slice,	9m
+        d4:ngrad fq8b:f1			;psyrecditioning grad.
+	400u
+	100u recph ph1
+	500u
+	d4:ngrad	fq1:f1		;slice grad
+	d8 gatepulse 1
+	p1:sp0		ph0
+	d1:ngrad			;read.t0  sl.t3
+	d5:ngrad 			;new
+echo,	d4:ngrad				;slice grad
+	d8 gatepulse 1 	
+	p2:sp1:f1	ph2
+	d8 gatepulse 1
+	d5:ngrad	ph3		;new
+	d2:ngrad:e	syrec		;read.t1  sl.t4  phase grad
+	d14:ngrad:e
+	if (CONFIG_dual_dds == No_dual_DDS )
+	{
+	  d14:e				;read grad
+	}
+	if (CONFIG_dual_dds != No_dual_DDS )
+	{
+	  d14:e		fqatofqb:f1	;read grad
+	}
+	aqq		adc 
+	d12:ngrad			;read.t2  sl.t5  phase.ref
+	d12		eoscnp		;read.t2  sl.t5  phase.ref
+	d5:ngrad	tofqa:f1	;new
+	lo to echo times NECHOES
+	if (ACQ_flipback)				
+	{
+	  d4:ngrad
+	  d8 gatepulse 1
+	  p2:sp1	ph2
+	  d8
+	  d1:ngrad			;read.t0 slice.t3
+	  d5:ngrad			;new
+	  d4:ngrad			;slice grad
+	  d8 gatepulse 1
+	  p1:sp0	ph4
+	}
+	d4:ngrad			;slice on
+	d10				;...for 20*ramptime
+	d4:ngrad			;slice off
+	d0				;...during recovery delay
+	10u
+	lo to slice times NSLICES
+	2.5u		ipp0
+	2.5u		ipp4
+         2.5u		ip1*2
+	lo to start times NA
+	2.5u		rpp0
+	2.5u		rpp4
+        2.5u		rp1
+	goto start
+exit
+
+ph0 = 0 2
+ph1 = 0
+ph2 = 1
+ph3 = 0
+ph4 = 2 0

@@ -1,0 +1,37 @@
+##TITLE=Parameter List
+##JCAMPDX=4.24
+##DATATYPE=Parameter Values
+##ORIGIN= Bruker Medizintechnik GMBH
+##OWNER=rer
+$$ Fri Feb 13 11:53:40 2004 EST (UT-5h)  rer
+$$ /data2/data/rer/nmr/DCB021304.oj1/subject
+##$SUBJECT_version_nr=2
+##$SUBJECT_id=( 11 )
+<DCB021304>
+##$SUBJECT_patient_instance_uid=( 65 )
+<2.16.756.5.5.51.2531725181.1076691204.650175>
+##$SUBJECT_name_string=( 64 )
+<DCB021304>
+##$SUBJECT_name=(<>, <DCB021304>)
+##$SUBJECT_dbirth=( 12 )
+<>
+##$SUBJECT_type=Human
+##$SUBJECT_sex=( 8 )
+<female>
+##$SUBJECT_sex_human=Female
+##$SUBJECT_study_name=( 64 )
+<DCB021304>
+##$SUBJECT_study_nr=1
+##$SUBJECT_study_instance_uid=( 65 )
+<2.16.756.5.5.52.2531725181.1076691204.650277>
+##$SUBJECT_size=0.0010
+##$SUBJECT_weight=5
+##$SUBJECT_pos_valid=Yes
+##$SUBJECT_location=( 32 )
+<BRUKER>
+##$SUBJECT_entry=SUBJ_ENTRY_HeadFirst
+##$SUBJECT_position=SUBJ_POS_Supine
+##$SUBJECT_date=( 21 )
+<11:53:24 13 Feb 2004>
+##$SUBJECT_abs_date=1076691204
+##END=
