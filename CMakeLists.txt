@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8)
-include(${CMAKE_SOURCE_DIR}/IJMacros.txt)
 
 #Change PROJECT_NAME to the name of your project
 project(MRParameterSuite)
