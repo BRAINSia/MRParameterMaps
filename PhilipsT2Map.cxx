@@ -27,7 +27,6 @@
 #include "itkExtractImageFilter.h"
 #include "itkThresholdImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
-#include "itkShiftScaleInPlaceImageFilter.h"
 #include "itkMetaDataObject.h"
 #include "itkVectorContainer.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
@@ -84,7 +83,7 @@ int main(int argc, char **argv)
     ThresholdImageFilterType;
   typedef itk::ShiftScaleImageFilter< PhilipsImageType, ImageType4D >
     ShiftScaleImageFilterType;
-  typedef itk::ShiftScaleInPlaceImageFilter< ImageType4D >
+  typedef itk::ShiftScaleImageFilter< ImageType4D, ImageType4D >
     ShiftScaleInPlaceImageFilterType;
   typedef itk::ExtractImageFilter< ImageType4D, ImageType >
     ExtractImageFilterType;
