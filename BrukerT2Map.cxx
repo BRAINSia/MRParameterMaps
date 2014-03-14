@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
     }
   if( !ptrToEchoes )
     {
-    std::cerr << "Received NULL echo times pointer from meta dictionary" 
+    std::cerr << "Received NULL echo times pointer from meta dictionary"
       << std::endl;
     return 1;
     }
@@ -141,10 +141,10 @@ int main(int argc, char **argv)
 
   // Typically a multi-echo spin-echo image is used to measure T2.
   // A spin-echo image is acquired using a 90 degree rf-pulse
-  // followed by a 180 degree rf-pulse.  To acquire a multi-echo 
-  // sequence a series of 180 degree rf-pulses follow the first 90 
-  // and 180 degree pulses.  The application of a perfectly homogenous 
-  // 180 rf-pulse is difficult and imperfections in the flip-angle 
+  // followed by a 180 degree rf-pulse.  To acquire a multi-echo
+  // sequence a series of 180 degree rf-pulses follow the first 90
+  // and 180 degree pulses.  The application of a perfectly homogenous
+  // 180 rf-pulse is difficult and imperfections in the flip-angle
   // lead to what are called stimulated echoes for the echo images
   // acquired after the first 180 degree rf-pulse.  Therefore in order
   // to measure T2 the first echo image without the stimulated echo
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
   for(unsigned int i=1; i<(unsigned int)numberOfEchoTimes; i++)
     {
     // convert to seconds
-    ptrToEchoes->SetElement(i-1,ptrToEchoes->ElementAt(i)/1000.0f); 
+    ptrToEchoes->SetElement(i-1,ptrToEchoes->ElementAt(i)/1000.0f);
     }
   ptrToEchoes->CastToSTLContainer().pop_back();
   --numberOfEchoTimes;
@@ -213,11 +213,11 @@ int main(int argc, char **argv)
         // means that the images are not stored as volumes.  We need to put
         // each echo from each slice into the vector as follows:
         // Skip to next slice ignoring the first echo.
-        echoIndex[2] = index[2]*(numberOfEchoTimes+1) + 1; 
+        echoIndex[2] = index[2]*(numberOfEchoTimes+1) + 1;
         VectorImageType::PixelType echoVector(numberOfEchoTimes);
         for(unsigned int echo=0; echo<numberOfEchoTimes; echo++)
           {
-          ImageType::PixelType pixelVal 
+          ImageType::PixelType pixelVal
             = baselineReader->GetOutput()->GetPixel(echoIndex);
           echoVector[echo] = (pixelVal < threshold)?0:pixelVal;
           ++echoIndex[2];
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
   baselineReader = NULL; // Not needed anymore.
 
   // Create T2 mapping class.
-  MRT2ParameterMap3DImageFilterType::Pointer t2Map 
+  MRT2ParameterMap3DImageFilterType::Pointer t2Map
     = MRT2ParameterMap3DImageFilterType::New();
   // Select the fit type.
   switch(algorithm)
@@ -259,7 +259,7 @@ int main(int argc, char **argv)
 #endif
 
   // Extract each output component and write to disk.
-  VectorIndexSelectionCastImageFilterType::Pointer extractComp = 
+  VectorIndexSelectionCastImageFilterType::Pointer extractComp =
     VectorIndexSelectionCastImageFilterType::New();
   extractComp->SetInput(t2Map->GetOutput());
   WriterType::Pointer writer = WriterType::New();

@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
   for(unsigned int i=0; i<(unsigned int)numberOfTimePoints; i++)
     {
     // convert to seconds
-    ptrToTimePoints->SetElement(i,ptrToTimePoints->ElementAt(i)/1000.0f); 
+    ptrToTimePoints->SetElement(i,ptrToTimePoints->ElementAt(i)/1000.0f);
     }
 
   // Read the image.
@@ -228,40 +228,40 @@ int main(int argc, char **argv)
   vectorImage->Allocate();
   ImageType::IndexType imageTimePointIndex;
   imageTimePointIndex.Fill(0);
-  for(index[0]=0,imageTimePointIndex[0]=0;index[0]<(int)size[0]; 
+  for(index[0]=0,imageTimePointIndex[0]=0;index[0]<(int)size[0];
     index[0]++,imageTimePointIndex[0]++)
     {
-    for(index[1]=0,imageTimePointIndex[1]=0;index[1]<(int)size[1]; 
+    for(index[1]=0,imageTimePointIndex[1]=0;index[1]<(int)size[1];
       index[1]++,imageTimePointIndex[1]++)
       {
       for(index[2]=0;index[2]<(int)size[2];index[2]++ )
       {
-      // Multi-echo inversion recovery Bruker images are stored as they are 
-      // acquired.  This means that the images are not stored as volumes.  We 
+      // Multi-echo inversion recovery Bruker images are stored as they are
+      // acquired.  This means that the images are not stored as volumes.  We
       // need to put each echo from each slice into the vector as follows:
       if((algorithm != MRT1ParameterMap3DImageFilterType::IDEAL_STEADY_STATE) &&
-        (algorithm != 
+        (algorithm !=
           MRT1ParameterMap3DImageFilterType::HYBRID_STEADY_STATE_3PARAM))
         {
         // Skip to next slice
-        imageTimePointIndex[2] = index[2]*numberOfTimePoints; 
+        imageTimePointIndex[2] = index[2]*numberOfTimePoints;
         }
       VectorImageType::PixelType timePointVector(numberOfTimePoints);
       for(unsigned int timePoint=0; timePoint<numberOfTimePoints; timePoint++)
         {
-        // Images are stored as volumes in the saturation recovery case, so we 
+        // Images are stored as volumes in the saturation recovery case, so we
         // need to skip to each new repetition while filling the vector.
-        if((algorithm == MRT1ParameterMap3DImageFilterType::IDEAL_STEADY_STATE) 
-          || (algorithm == 
+        if((algorithm == MRT1ParameterMap3DImageFilterType::IDEAL_STEADY_STATE)
+          || (algorithm ==
             MRT1ParameterMap3DImageFilterType::HYBRID_STEADY_STATE_3PARAM) )
           {
           imageTimePointIndex[2] = index[2] + (realSlices*timePoint);
           }
-          ImageType::PixelType pixelVal = 
+          ImageType::PixelType pixelVal =
             baselineReader->GetOutput()->GetPixel(imageTimePointIndex);
           ImageType::PixelType maskVal = 0;
           if((algorithm == MRT1ParameterMap3DImageFilterType::IDEAL_STEADY_STATE)
-            || (algorithm == 
+            || (algorithm ==
               MRT1ParameterMap3DImageFilterType::HYBRID_STEADY_STATE_3PARAM))
             {
             maskVal = t1Mask->GetOutput()->GetPixel(index);
@@ -274,7 +274,7 @@ int main(int argc, char **argv)
             }
           timePointVector[timePoint] = (maskVal==0)?0:pixelVal;
           if((algorithm != MRT1ParameterMap3DImageFilterType::IDEAL_STEADY_STATE)
-            && (algorithm != 
+            && (algorithm !=
               MRT1ParameterMap3DImageFilterType::HYBRID_STEADY_STATE_3PARAM) )
             {
             ++imageTimePointIndex[2];
@@ -289,9 +289,9 @@ int main(int argc, char **argv)
   baselineReader = NULL;
 
   // Create T1 mapping class.
-  MRT1ParameterMap3DImageFilterType::Pointer t1Map = 
+  MRT1ParameterMap3DImageFilterType::Pointer t1Map =
     MRT1ParameterMap3DImageFilterType::New();
-  // Select the fit type.  
+  // Select the fit type.
   switch(algorithm)
     {
     case MRT1ParameterMap3DImageFilterType::IDEAL_STEADY_STATE:
@@ -337,7 +337,7 @@ int main(int argc, char **argv)
 #endif
 
   // Extract each output component and write to disk.
-  VectorIndexSelectionCastImageFilterType::Pointer extractComp = 
+  VectorIndexSelectionCastImageFilterType::Pointer extractComp =
     VectorIndexSelectionCastImageFilterType::New();
   extractComp->SetInput(t1Map->GetOutput());
   WriterType::Pointer writer = WriterType::New();

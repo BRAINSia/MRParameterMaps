@@ -10,6 +10,9 @@ include(Dart)
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 
+find_package(SlicerExecutionModel REQUIRED GenerateCLP)
+include(${GenerateCLP_USE_FILE})
+
 #Set any libraries that your project depends on.
 #examples: ITKCommon, VTKRendering, etc
 set(Libraries ${ITK_LIBRARIES})
@@ -20,7 +23,7 @@ set(Libraries ${ITK_LIBRARIES})
 #be linked to all the libraries you specified above.
 #You can build more than one executable per project
 
-set(CurrentExe "ImageCompare")
+set(CurrentExe ImageCompare)
 add_executable(${CurrentExe} ImageCompare.cxx)
 set_target_properties(${CurrentExe} PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
@@ -32,7 +35,7 @@ add_library(Bruker2DSEQImageIO
 )
 target_link_libraries(Bruker2DSEQImageIO ${ITK_LIBRARIES})
 
-set(CurrentExe "BrukerT2Map")
+set(CurrentExe BrukerT2Map)
 set(CurrentSrc
   BrukerT2Map.cxx
   )
@@ -60,6 +63,16 @@ set(CurrentSrc
   PhilipsT1Map.cxx
   itkPhilipsPAR.cxx
   )
+add_executable(${CurrentExe} ${CurrentSrc})
+target_link_libraries(${CurrentExe} ${Libraries})
+
+set(CurrentExe T1rhoMap)
+set(CurrentSrc T1rhoMap.cxx
+  itkFDFCommonImageIO.cxx
+  itkFDFImageIO.cxx
+  itkFDFImageIOFactory.cxx
+)
+GenerateCLP(CurrentSrc T1rhoMap.xml)
 add_executable(${CurrentExe} ${CurrentSrc})
 target_link_libraries(${CurrentExe} ${Libraries})
 

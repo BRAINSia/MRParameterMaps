@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+  <executable>
+  <category>BRAINS</category>   
+  <title>T1rho Map</title> 
+  
+  <description>This program generate a T1rho Map</description> 
+  <version>0.1.0.$Revision: 1.4 $(alpha)</version> 
+  <documentation-url>http:://mri.radiology.uiowa.edu/mriwiki</documentation-url> 
+  <license>NEED TO ADD</license> 
+  <contributor>This tool was developed by Vincent Magnotta.</contributor> 
+  
+  
+  <parameters>
+    <label>Input Parameters</label> 
+    <description>Parameters for running the T1rho Mapping</description> 
+
+    <string-vector>
+      <name>inputVolumes</name> 
+      <longflag>--inputVolumes</longflag> 
+      <description>Required: Input volumes for T1rho calculation</description> 
+      <label>Input Volumes</label> 
+      <channel>input</channel> 
+    </string-vector>  
+    
+    <float-vector>
+      <name>T1rhoTimes</name> 
+      <longflag>--t1rhoTimes</longflag> 
+      <description>Required: Input T1rho times</description> 
+      <label>T1rho Times</label> 
+      <channel>input</channel> 
+    </float-vector> 
+    
+    <string-enumeration>
+      <name>mappingAlgorithm</name> 
+      <longflag>--mappingAlgorithm</longflag> 
+      <description>Regression method</description> 
+      <label>Mapping Algorithm</label> 
+      <default>Linear</default>
+      <element>Linear</element>
+      <element>Nonlinear</element>
+      <element>"Nonlinear With Constant"</element>
+      <channel>input</channel> 
+    </string-enumeration>
+    
+    <float>
+      <name>maxTime</name> 
+      <longflag>--maxTime</longflag> 
+      <description>Maximum T1rho time</description> 
+      <label>Maximum T1rho Time</label> 
+      <default>1000.0</default>
+      <channel>input</channel> 
+    </float>
+    
+    <float>
+      <name>threshold</name> 
+      <longflag>--threshold</longflag> 
+      <description>Threshold for eliminating background voxels</description> 
+      <label>Background Threshold</label> 
+      <default>1000.0</default>
+      <channel>input</channel> 
+    </float>
+    
+  </parameters>
+  
+  <parameters>
+    <label>Output Files</label> 
+    <description>Output files for T1rho Mapping</description> 
+  
+    <image>
+      <name>outputFilename</name> 
+      <longflag>--outputFilename</longflag> 
+      <description>Required: Output relaxation map</description> 
+      <label>T1rho Image</label> 
+      <channel>output</channel> 
+    </image>
+    
+    <image>
+      <name>outputExpConstFilename</name> 
+      <longflag>--outputExpConstFilename</longflag> 
+      <description>Required: Output Exponential Constant Map</description> 
+      <label>Exp Constant Image</label> 
+      <channel>output</channel> 
+    </image>
+    
+    <image>
+      <name>outputConstFilename</name> 
+      <longflag>--outputConstFilename</longflag> 
+      <description>Required: Output Constant Map</description> 
+      <label>Constant Image</label> 
+      <channel>output</channel> 
+    </image>
+    
+    <image>
+      <name>outputRSquaredFilename</name> 
+      <longflag>--outputRSquaredFilename</longflag> 
+      <description>Required: Output R sqaured Map</description> 
+      <label>R Squared Image</label> 
+      <channel>output</channel> 
+    </image> 
+
+  </parameters>
+
+  </executable>
