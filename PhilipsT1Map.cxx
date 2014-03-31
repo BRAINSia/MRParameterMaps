@@ -35,15 +35,7 @@
 #include "vnl/vnl_vector_fixed.h"
 #include <algorithm>
 
-namespace itk
-{
-const char *const PAR_MaxNumberOfCardiacPhases = "PAR_MaxNumberOfCardiacPhases";
-const char *const PAR_NumberOfImageTypes = "PAR_NumberOfImageTypes";
-const char *const PAR_ImageTypes = "PAR_ImageTypes";
-const char *const PAR_ScanningSequenceImageTypeRescaleValues =
-  "PAR_ScanningSequenceImageTypeRescaleValues";
-const char *const PAR_TriggerTimes = "PAR_TriggerTimes";
-}
+
 int main(int argc, char **argv)
 {
   if( argc < 6 )

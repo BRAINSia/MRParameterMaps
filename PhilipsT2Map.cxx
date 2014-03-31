@@ -33,18 +33,6 @@
 #include "vnl/vnl_vector_fixed.h"
 #include <algorithm>
 
-namespace itk
-{
-const char *const PAR_MaxNumberOfEchoes = "PAR_MaxNumberOfEchoes";
-const char *const PAR_NumberOfImageTypes = "PAR_NumberOfImageTypes";
-const char *const PAR_ImageTypes = "PAR_ImageTypes";
-const char *const PAR_NumberOfScanningSequences = "PAR_NumberOfScanningSequences";
-const char *const PAR_ScanningSequenceImageTypeRescaleValues =
-  "PAR_ScanningSequenceImageTypeRescaleValues";
-const char *const PAR_EchoTimes = "PAR_EchoTimes";
-
-}
-
 int main(int argc, char **argv)
 {
   if( argc < 6 )

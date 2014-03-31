@@ -13,15 +13,19 @@ include(${ITK_USE_FILE})
 find_package(SlicerExecutionModel REQUIRED GenerateCLP)
 include(${GenerateCLP_USE_FILE})
 
-#Set any libraries that your project depends on.
-#examples: ITKCommon, VTKRendering, etc
-set(Libraries ${ITK_LIBRARIES})
 
-#the following block of code is an example of how to build an executable in
-#cmake.  Unmodified, it will add an executable called "MyExe" to the project.
-#MyExe will be built using the files MyClass.h and MyClass.cxx, and it will
-#be linked to all the libraries you specified above.
-#You can build more than one executable per project
+
+add_library(Bruker2DSEQImageIO
+  itkBruker2DSEQImageIO.cxx
+  itkBruker2DSEQImageIOFactory.cxx
+)
+target_link_libraries(Bruker2DSEQImageIO ${ITK_LIBRARIES})
+add_library(PhilipsRECImageIO
+  itkPhilipsRECImageIO.cxx itkPhilipsRECImageIOFactory.cxx itkPhilipsPAR.cxx
+)
+target_link_libraries(PhilipsRECImageIO ${ITK_LIBRARIES})
+
+set(Libraries PhilipsRECImageIO Bruker2DSEQImageIO )
 
 set(CurrentExe ImageCompare)
 add_executable(${CurrentExe} ImageCompare.cxx)
@@ -29,17 +33,12 @@ set_target_properties(${CurrentExe} PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(${CurrentExe} ${Libraries})
 
-add_library(Bruker2DSEQImageIO
-  itkBruker2DSEQImageIO.cxx
-  itkBruker2DSEQImageIOFactory.cxx
-)
-target_link_libraries(Bruker2DSEQImageIO ${ITK_LIBRARIES})
-
 set(CurrentExe BrukerT2Map)
 set(CurrentSrc
   BrukerT2Map.cxx
   )
 add_executable(${CurrentExe} ${CurrentSrc})
+
 target_link_libraries(${CurrentExe} Bruker2DSEQImageIO ${Libraries})
 
 
@@ -53,8 +52,8 @@ target_link_libraries(${CurrentExe} Bruker2DSEQImageIO ${Libraries})
 set(CurrentExe PhilipsT2Map)
 set(CurrentSrc
   PhilipsT2Map.cxx
-  itkPhilipsPAR.cxx
   )
+
 add_executable(${CurrentExe} ${CurrentSrc})
 target_link_libraries(${CurrentExe} ${Libraries})
 
