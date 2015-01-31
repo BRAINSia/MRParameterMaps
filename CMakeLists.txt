@@ -1,19 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 
-#Change PROJECT_NAME to the name of your project
 project(MRParameterSuite)
 
 #The following lines are required to use Dart
 enable_testing()
-include(Dart)
 
-find_package(ITK REQUIRED)
+find_package(ITK 4.7 REQUIRED)
 include(${ITK_USE_FILE})
-
-find_package(SlicerExecutionModel REQUIRED GenerateCLP)
-include(${GenerateCLP_USE_FILE})
-
-
 
 add_library(Bruker2DSEQImageIO
   itkBruker2DSEQImageIO.cxx
@@ -25,13 +18,13 @@ add_library(PhilipsRECImageIO
 )
 target_link_libraries(PhilipsRECImageIO ${ITK_LIBRARIES})
 
-set(Libraries PhilipsRECImageIO Bruker2DSEQImageIO )
+set(CUSTOM_IO_LIBRARIES PhilipsRECImageIO Bruker2DSEQImageIO )
 
 set(CurrentExe ImageCompare)
 add_executable(${CurrentExe} ImageCompare.cxx)
 set_target_properties(${CurrentExe} PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-target_link_libraries(${CurrentExe} ${Libraries})
+target_link_libraries(${CurrentExe} ${CUSTOM_IO_LIBRARIES})
 
 set(CurrentExe BrukerT2Map)
 set(CurrentSrc
@@ -39,7 +32,7 @@ set(CurrentSrc
   )
 add_executable(${CurrentExe} ${CurrentSrc})
 
-target_link_libraries(${CurrentExe} Bruker2DSEQImageIO ${Libraries})
+target_link_libraries(${CurrentExe} ${CUSTOM_IO_LIBRARIES})
 
 
 set(CurrentExe BrukerT1Map)
@@ -47,7 +40,7 @@ set(CurrentSrc
   BrukerT1Map.cxx
   )
 add_executable(${CurrentExe} ${CurrentSrc})
-target_link_libraries(${CurrentExe} Bruker2DSEQImageIO ${Libraries})
+target_link_libraries(${CurrentExe} ${CUSTOM_IO_LIBRARIES})
 
 set(CurrentExe PhilipsT2Map)
 set(CurrentSrc
@@ -55,7 +48,7 @@ set(CurrentSrc
   )
 
 add_executable(${CurrentExe} ${CurrentSrc})
-target_link_libraries(${CurrentExe} ${Libraries})
+target_link_libraries(${CurrentExe} ${CUSTOM_IO_LIBRARIES})
 
 set(CurrentExe PhilipsT1Map)
 set(CurrentSrc
@@ -63,7 +56,11 @@ set(CurrentSrc
   itkPhilipsPAR.cxx
   )
 add_executable(${CurrentExe} ${CurrentSrc})
-target_link_libraries(${CurrentExe} ${Libraries})
+target_link_libraries(${CurrentExe} ${CUSTOM_IO_LIBRARIES})
+
+
+find_package(SlicerExecutionModel REQUIRED GenerateCLP)
+include(${GenerateCLP_USE_FILE})
 
 set(CurrentExe T1rhoMap)
 set(CurrentSrc T1rhoMap.cxx
@@ -73,7 +70,7 @@ set(CurrentSrc T1rhoMap.cxx
 )
 GenerateCLP(CurrentSrc T1rhoMap.xml)
 add_executable(${CurrentExe} ${CurrentSrc})
-target_link_libraries(${CurrentExe} ${Libraries})
+target_link_libraries(${CurrentExe} ${CUSTOM_IO_LIBRARIES})
 
 set(CurrentParam
   ${CMAKE_SOURCE_DIR}/DCB021304.oj1/3/pdata/1/2dseq
