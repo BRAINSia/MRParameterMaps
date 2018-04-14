@@ -439,7 +439,7 @@ void PhilipsRECImageIO::Read(void* buffer)
   // In addition, it has the added benifit of reading gzip compressed image
   // files that do not have a .gz ending.
   gzFile file_p = ::gzopen( ImageFileName.c_str(), "rb" );
-  if( file_p == NULL )
+  if( file_p == nullptr )
     {
     ExceptionObject exception(__FILE__, __LINE__);
     std::string message="Philips REC Data File can not be read: "

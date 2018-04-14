@@ -234,7 +234,7 @@ int main(int argc, char **argv)
 
   // Get rescale values.
   PhilipsRECImageIOType::ScanningSequenceImageTypeRescaleValuesContainerType
-    ::Pointer scanSequenceImageTypeRescaleValues = NULL;
+    ::Pointer scanSequenceImageTypeRescaleValues = nullptr;
   if( !itk::ExposeMetaData<PhilipsRECImageIOType::
     ScanningSequenceImageTypeRescaleValuesContainerType::Pointer>
     (imageIO->GetMetaDataDictionary(),
@@ -263,8 +263,7 @@ int main(int argc, char **argv)
     }
 
   // Get trigger times.
-  PhilipsRECImageIOType::TriggerTimesContainerType::Pointer ptrToTimePoints =
-    NULL;
+  PhilipsRECImageIOType::TriggerTimesContainerType::Pointer ptrToTimePoints = nullptr;
   if(!itk::ExposeMetaData<
     PhilipsRECImageIOType::TriggerTimesContainerType::Pointer>
     (imageIO->GetMetaDataDictionary(),itk::PAR_TriggerTimes,ptrToTimePoints) )
@@ -301,8 +300,8 @@ int main(int argc, char **argv)
     }
 
   // Change image to floating point value.
-  ShiftScaleImageFilterType::Pointer scaleOnly = NULL;
-  ShiftScaleInPlaceImageFilterType::Pointer shiftAndScale = NULL;
+  ShiftScaleImageFilterType::Pointer scaleOnly = nullptr;
+  ShiftScaleInPlaceImageFilterType::Pointer shiftAndScale = nullptr;
   PhilipsRECImageIOType::ImageTypeRescaleValuesType rescaleValues;
   if((algorithm == MRT1ParameterMap3DImageFilterType::INVERSION_RECOVERY) ||
     (algorithm == MRT1ParameterMap3DImageFilterType::INVERSION_RECOVERY_3PARAM)

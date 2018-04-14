@@ -49,13 +49,13 @@ public:
     return (t * a * exp( -t * b ));
     }
 
-  void f(vnl_vector<double> const& x, vnl_vector<double>& y) {
+  void f(vnl_vector<double> const& x, vnl_vector<double>& y) override {
     for (unsigned int i=0; i<this->m_NumSignals; ++i) {
       y[i] = compute(this->m_Time[i], x(0), x(1) ) - this->m_Signal[i];
       }
     }
 
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) {
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) override {
     for (unsigned int i=0; i<this->m_NumSignals; ++i) {
       J(i,0) = compute_a(this->m_Time[i], x(0), x(1) );
       }
@@ -91,13 +91,13 @@ public:
     return (t * a * exp( -t * c ));
     }
 
-  void f(vnl_vector<double> const& x, vnl_vector<double>& y) {
+  void f(vnl_vector<double> const& x, vnl_vector<double>& y) override {
     for (unsigned int i=0; i<this->m_NumSignals; ++i)       {
       y[i] = compute(this->m_Time[i], x(0), x(1), x(2) ) - this->m_Signal[i];
       }
     }
 
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) {
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) override {
     for (unsigned int i=0; i<this->m_NumSignals; ++i) {
       J(i,0) = compute_a(this->m_Time[i], x(0), x(1), x(2) );
       }
@@ -133,13 +133,13 @@ public:
     return (t * a * 2.0 * exp( -t * b ));
     }
 
-  void f(vnl_vector<double> const& x, vnl_vector<double>& y) {
+  void f(vnl_vector<double> const& x, vnl_vector<double>& y) override {
     for (unsigned int i=0; i<this->m_NumSignals; ++i) {
       y[i] = compute(this->m_Time[i], x(0), x(1) ) - this->m_Signal[i];
       }
     }
 
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) {
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) override {
     for (unsigned int i=0; i<this->m_NumSignals; ++i) {
       J(i,0) = compute_a(this->m_Time[i], x(0), x(1) );
       }
@@ -175,13 +175,13 @@ public:
     return (t * a * b * exp( -t * c ));
     }
 
-  void f(vnl_vector<double> const& x, vnl_vector<double>& y) {
+  void f(vnl_vector<double> const& x, vnl_vector<double>& y) override {
     for (unsigned int i=0; i<this->m_NumSignals; ++i)       {
       y[i] = compute(this->m_Time[i], x(0), x(1), x(2) ) - this->m_Signal[i];
       }
     }
 
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) {
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) override {
     for (unsigned int i=0; i<this->m_NumSignals; ++i) {
       J(i,0) = compute_a(this->m_Time[i], x(0), x(1), x(2) );
       }
@@ -210,7 +210,7 @@ MRT1ParameterMap3DImageFilter<TMRImagePixelType,TMRParameterMapImagePixelType>
   this->m_MaxT1Time = 10.0f;
   this->m_PerformR1Mapping = false;
   this->m_MRImageTypeEnumeration = Else;
-  this->m_TimeContainer = NULL;
+  this->m_TimeContainer = nullptr;
   this->m_Algorithm = IDEAL_STEADY_STATE;
 }
 
@@ -841,7 +841,7 @@ MRT1ParameterMap3DImageFilter<TMRImagePixelType,TMRParameterMapImagePixelType>
 
     for( unsigned int i = 0; i< this->m_NumberOfImages; i++ )
       {
-      typename MRImageType::Pointer mrImagePointer = NULL;
+      typename MRImageType::Pointer mrImagePointer = nullptr;
       
       mrImagePointer = static_cast< MRImageType * >( 
         this->ProcessObject::GetInput(i) );
@@ -965,7 +965,7 @@ MRT1ParameterMap3DImageFilter<TMRImagePixelType,TMRParameterMapImagePixelType>
     {
     typedef ImageRegionConstIterator< MRImagesType > MRImageIteratorType;
     typedef typename MRImagesType::PixelType         MREchoVectorType;
-    typename MRImagesType::Pointer mrImagePointer = NULL;
+    typename MRImagesType::Pointer mrImagePointer = nullptr;
     int nonzeroCount = 0;
 
     mrImagePointer = static_cast< MRImagesType * >(

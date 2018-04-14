@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 
   // Get rescale values for converting the 16 bit image to floating point.
   PhilipsRECImageIOType::ScanningSequenceImageTypeRescaleValuesContainerType
-    ::Pointer scanSequenceImageTypeRescaleValues = NULL;
+    ::Pointer scanSequenceImageTypeRescaleValues = nullptr;
   if( !itk::ExposeMetaData<PhilipsRECImageIOType
     ::ScanningSequenceImageTypeRescaleValuesContainerType::Pointer>
     (imageIO->GetMetaDataDictionary(),
@@ -253,8 +253,8 @@ int main(int argc, char **argv)
   t2Mask->ThresholdBelow(threshold);
 
   // Change image to floating point value.
-  ShiftScaleImageFilterType::Pointer scaleOnly = NULL;
-  ShiftScaleInPlaceImageFilterType::Pointer shiftAndScale = NULL;
+  ShiftScaleImageFilterType::Pointer scaleOnly = nullptr;
+  ShiftScaleInPlaceImageFilterType::Pointer shiftAndScale = nullptr;
   PhilipsRECImageIOType::ImageTypeRescaleValuesType rescaleValues = 
     rescaleValueVector->ElementAt(0); // Magnitude image is the first element.
   if( (rescaleValues[2] != 0) && // scale slope (SS)
@@ -331,7 +331,7 @@ int main(int argc, char **argv)
   extractionIndex[1] = 0;
   extractionIndex[2] = 0;
   extractionRegion.SetSize(extractionSize);
-  PhilipsRECImageIOType::EchoTimesContainerType::Pointer ptrToEchoes = NULL;
+  PhilipsRECImageIOType::EchoTimesContainerType::Pointer ptrToEchoes = nullptr;
   if(!itk::ExposeMetaData<PhilipsRECImageIOType::EchoTimesContainerType::Pointer>
     (imageIO->GetMetaDataDictionary(), itk::PAR_EchoTimes,ptrToEchoes) )
     {

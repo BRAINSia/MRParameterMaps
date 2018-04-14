@@ -46,16 +46,16 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanReadFile(const char*);
+  bool CanReadFile(const char*) override;
 
   /** Set the spacing and diemention information for the set filename. */
-  virtual void ReadImageInformation();
+  void ReadImageInformation() override;
 
   /** Get the type of the pixel.  */
   //virtual const itk::ImageIOBase::IOPixelType GetPixelType() const;
 
   /** Reads the data from disk into the memory buffer provided. */
-  virtual void Read(void* buffer);
+  void Read(void* buffer) override;
 
   /** Reads 3D data from multiple files assuming one slice per file. */
   virtual void ReadVolume(void* buffer);
@@ -63,26 +63,26 @@ public:
   /** Compute the size (in bytes) of the components of a pixel. For
    * example, and RGB pixel of unsigned char would have a
    * component size of 1 byte. */
-  virtual unsigned int GetComponentSize() const;
+  unsigned int GetComponentSize() const override;
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*);
+  bool CanWriteFile(const char*) override;
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
-  virtual void WriteImageInformation();
+  void WriteImageInformation() override;
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
-  virtual void Write(const void* buffer);
+  void Write(const void* buffer) override;
 
 protected:
   FDFImageIO();
-  ~FDFImageIO();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~FDFImageIO() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   void WriteSlice(std::string& fileName, const void* buffer);
 

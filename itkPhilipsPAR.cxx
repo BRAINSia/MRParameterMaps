@@ -523,7 +523,7 @@ bool ReadPAR(std::string parFile, struct par_parameter* pPar)
   std::string::size_type index = 0;
   std::istringstream inString;
 
-  if( pPar == NULL )
+  if( pPar == nullptr )
     {
     std::cerr << "ReadPAR: pPar == NULL" << std::endl;
     return false;

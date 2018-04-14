@@ -49,13 +49,13 @@ public:
     return (- t * a * exp( -t * b ));
     }
 
-  void f(vnl_vector<double> const& x, vnl_vector<double>& y) {
+  void f(vnl_vector<double> const& x, vnl_vector<double>& y) override {
     for (unsigned int i=0; i<this->m_NSignals; ++i)       {
       y[i] = compute(this->m_Time[i], x(0), x(1) ) - this->m_Signal[i];
       }
     }
 
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) {
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) override {
     for (unsigned int i=0; i<this->m_NSignals; ++i) {
       J(i,0) = compute_a(this->m_Time[i], x(0), x(1) );
       }
@@ -91,13 +91,13 @@ public:
     return ( 1.0 );
     }
 
-  void f(vnl_vector<double> const& x, vnl_vector<double>& y) {
+  void f(vnl_vector<double> const& x, vnl_vector<double>& y) override {
     for (unsigned int i=0; i<this->m_NSignals; ++i)       {
       y[i] = compute(this->m_Time[i], x(0), x(1), x(2) ) - this->m_Signal[i];
       }
     }
 
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) {
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) override {
     for (unsigned int i=0; i<this->m_NSignals; ++i) {
       J(i,0) = compute_a(this->m_Time[i], x(0), x(1), x(2) );
       }
@@ -126,7 +126,7 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
   this->m_MaxT2Time = 10.0f;
   this->m_PerformR2Mapping = false;
   this->m_MREchoImageTypeEnumeration = Else;
-  this->m_EchoTimeContainer = NULL;
+  this->m_EchoTimeContainer = nullptr;
   this->m_Algorithm = LINEAR;
 }
 
@@ -436,7 +436,7 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
 
     for( unsigned int i = 0; i< this->m_NumberOfEchoImages; i++ )
       {
-      typename MREchoImageType::Pointer echoImagePointer = NULL;
+      typename MREchoImageType::Pointer echoImagePointer = nullptr;
 
       echoImagePointer = static_cast< MREchoImageType * >(
         this->ProcessObject::GetInput(i) );
@@ -545,7 +545,7 @@ MRT2ParameterMap3DImageFilter<TMREchoImagePixelType,
     {
     typedef ImageRegionConstIterator< MREchoImagesType > MREchoIteratorType;
     typedef typename MREchoImagesType::PixelType         MREchoVectorType;
-    typename MREchoImagesType::Pointer echoImagePointer = NULL;
+    typename MREchoImagesType::Pointer echoImagePointer = nullptr;
     int nonzeroCount = 0;
 
     echoImagePointer = static_cast< MREchoImagesType * >(

@@ -123,7 +123,7 @@ int main(int argc, char **argv)
   dims[2] = imageIO->GetDimensions(2);
 
   // Get the echo times in ms.
-  Bruker2DSEQImageIOType::ACQEchoTimeContainerType::Pointer ptrToEchoes = NULL;
+  Bruker2DSEQImageIOType::ACQEchoTimeContainerType::Pointer ptrToEchoes = nullptr;
   if(!itk::ExposeMetaData<
     Bruker2DSEQImageIOType::ACQEchoTimeContainerType::Pointer>
    (imageIO->GetMetaDataDictionary(),itk::ACQ_ECHO_TIME,ptrToEchoes))
@@ -226,7 +226,7 @@ int main(int argc, char **argv)
         }
       }
     }
-  baselineReader = NULL; // Not needed anymore.
+  baselineReader = nullptr; // Not needed anymore.
 
   // Create T2 mapping class.
   MRT2ParameterMap3DImageFilterType::Pointer t2Map
