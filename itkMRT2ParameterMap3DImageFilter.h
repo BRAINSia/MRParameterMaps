@@ -175,8 +175,8 @@ public:
   
 protected:
   MRT2ParameterMap3DImageFilter();
-  ~MRT2ParameterMap3DImageFilter() {};
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~MRT2ParameterMap3DImageFilter() override {};
+  void PrintSelf(std::ostream& os, Indent indent) const override;
   
   void FitLinearExponential(ExponentialFitType X, ExponentialFitType Y, 
     unsigned int num, MRParameterMapPixelType &output);
@@ -186,11 +186,11 @@ protected:
     ExponentialFitType Y, unsigned int num, MRParameterMapPixelType &output);
   
   /** Setup vector image vector length. */
-  virtual void GenerateOutputInformation();
+  void GenerateOutputInformation() override;
   
-  void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() override;
   void ThreadedGenerateData( const 
-      OutputImageRegionType &outputRegionForThread, ThreadIdType);
+      OutputImageRegionType &outputRegionForThread, ThreadIdType) override;
   
   /** enum to indicate if the MR echo image is specified as a single multi-
    * component image or as several separate images */

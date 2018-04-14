@@ -126,8 +126,7 @@ int main(int argc, char **argv)
   dims[2] = imageIO->GetDimensions(2);
 
   // Extract repetition/inversion times depending on the algorithm.
-  Bruker2DSEQImageIOType::ACQRepetitionTimeContainerType::Pointer ptrToTimePoints
-    = NULL;
+  Bruker2DSEQImageIOType::ACQRepetitionTimeContainerType::Pointer ptrToTimePoints = nullptr;
   if((algorithm == MRT1ParameterMap3DImageFilterType::IDEAL_STEADY_STATE) ||
     (algorithm == MRT1ParameterMap3DImageFilterType::HYBRID_STEADY_STATE_3PARAM))
     {
@@ -285,8 +284,8 @@ int main(int argc, char **argv)
       }
     }
   // Not needed anymore.
-  t1Mask = NULL;
-  baselineReader = NULL;
+  t1Mask = nullptr;
+  baselineReader = nullptr;
 
   // Create T1 mapping class.
   MRT1ParameterMap3DImageFilterType::Pointer t1Map =
