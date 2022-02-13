@@ -26,7 +26,7 @@
 #include "itkPhilipsRECImageIO.h"
 #include "itkPhilipsPAR.h"
 #include "itkIOCommon.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkByteSwapper.h"
 #include "itkMetaDataObject.h"
 #include "itkSpatialOrientationAdapter.h"
